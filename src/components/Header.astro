@@ -226,14 +226,33 @@ const isCurrent = (href: string) => href === path;
 			display: inline;
 		}
 
+		/* Hangs directly under the header (its positioned ancestor), wherever the header
+		   sits, so it never rides up over the logo row when the announcement bar is showing */
 		.menu-panel {
-			position: fixed;
-			inset: 4.5rem 0 0 0;
-			padding: 2.5rem var(--gutter);
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			height: calc(100dvh - var(--header-h));
+			padding: var(--space-4) var(--gutter);
 			display: grid;
 			align-content: start;
-			gap: 3rem;
+			gap: var(--space-5);
 			overflow-y: auto;
+			border-top: 1px solid var(--rule);
+		}
+
+		/* While the menu is open the header joins it as one Espresso surface,
+		   including over the home banner, and the page behind stops scrolling */
+		.site-header:has(.menu[open]),
+		:global(html.js) .site-header[data-overlay]:has(.menu[open]) {
+			background: var(--espresso);
+			color: var(--mineral);
+			border-bottom-color: var(--espresso);
+		}
+
+		:global(html:has(.menu[open])) {
+			overflow: hidden;
 		}
 
 		.menu-panel ul {
