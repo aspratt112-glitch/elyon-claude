@@ -2,7 +2,6 @@
 import { defineConfig } from 'astro/config';
 
 import react from '@astrojs/react';
-import markdoc from '@astrojs/markdoc';
 import keystatic from '@keystatic/astro';
 
 // Keystatic uses local storage, so its admin UI only runs under `astro dev`.
@@ -11,5 +10,5 @@ const isDev = process.argv.includes('dev');
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react(), markdoc(), ...(isDev ? [keystatic()] : [])]
+  integrations: [react(), ...(isDev ? [keystatic()] : [])]
 });

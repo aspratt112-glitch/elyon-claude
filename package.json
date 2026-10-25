@@ -12,8 +12,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/markdoc": "^2.1.1",
     "@astrojs/react": "^7.1.1",
+    "@fontsource/martian-mono": "^5.3.0",
     "@keystatic/astro": "^6.0.0",
     "@keystatic/core": "^0.6.9",
     "@types/react": "^19.3.0",

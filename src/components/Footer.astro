@@ -1,0 +1,185 @@
+---
+import Wordmark from './logos/Wordmark.astro';
+import Monogram from './logos/Monogram.astro';
+import { getSettings, getProducts } from '../lib/content';
+
+const settings = await getSettings();
+const products = await getProducts();
+const year = new Date().getFullYear();
+---
+
+<footer class="footer bg-espresso on-dark">
+	<div class="wrap top">
+		<div class="col">
+			<p class="label heading">Explore</p>
+			<ul>
+				<li><a href="/#system">Shop</a></li>
+				<li><a href="/story">Our Story</a></li>
+				<li><a href="/mission">Mission</a></li>
+				<li><a href="/faq">FAQs</a></li>
+				<li><a href="/contact">Contact</a></li>
+			</ul>
+		</div>
+
+		<div class="col">
+			<p class="label heading">The System</p>
+			<ul>
+				{products.map((p) => <li><a href={`/products/${p.slug}`}>{p.name}</a></li>)}
+			</ul>
+		</div>
+
+		<div class="col">
+			<p class="label heading">Connect</p>
+			<ul>
+				{settings.instagram && <li><a href={settings.instagram} rel="noopener">Instagram</a></li>}
+				{settings.facebook && <li><a href={settings.facebook} rel="noopener">Facebook</a></li>}
+				{settings.email && <li><a href={`mailto:${settings.email}`}>{settings.email}</a></li>}
+			</ul>
+		</div>
+
+		<form class="col newsletter" id="newsletter" data-email={settings.email}>
+			<p class="label heading">{settings.newsletterHeading}</p>
+			<p class="mono">{settings.newsletterText}</p>
+			<div class="signup">
+				<label class="visually-hidden" for="newsletter-email">Email address</label>
+				<input id="newsletter-email" name="email" type="email" placeholder="Email address" required autocomplete="email" />
+				<button class="label" type="submit">Join</button>
+			</div>
+		</form>
+	</div>
+
+	<div class="wrap marks">
+		<Wordmark class="big-wordmark" />
+		<div class="base label">
+			<Monogram class="mono-mark" />
+			<span>{settings.footerTagline}</span>
+			<span>© {year} Elyon Labs</span>
+		</div>
+	</div>
+</footer>
+
+<script>
+	// No mailing list provider is connected yet, so sign-ups open a pre-filled email.
+	const form = document.querySelector<HTMLFormElement>('#newsletter');
+	form?.addEventListener('submit', (event) => {
+		event.preventDefault();
+		const email = new FormData(form).get('email');
+		const subject = encodeURIComponent('Join the Elyon community');
+		const body = encodeURIComponent(`Please add ${email} to the Elyon launch list.`);
+		window.location.href = `mailto:${form.dataset.email}?subject=${subject}&body=${body}`;
+	});
+</script>
+
+<style>
+	.footer {
+		padding-top: clamp(4rem, 8vw, 6rem);
+	}
+
+	.top {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.6fr);
+		gap: 2.5rem;
+	}
+
+	.heading {
+		margin-bottom: 1.25rem;
+		opacity: 0.6;
+	}
+
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: 0.55rem;
+		font-size: 0.9375rem;
+	}
+
+	ul a {
+		text-decoration: none;
+	}
+
+	ul a:hover {
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+
+	.newsletter .mono {
+		max-width: 42ch;
+		margin-bottom: 1.5rem;
+	}
+
+	.signup {
+		display: flex;
+		border-bottom: 1px solid var(--mineral);
+	}
+
+	.signup input {
+		flex: 1;
+		min-width: 0;
+		padding: 0.9rem 0;
+		border: 0;
+		background: transparent;
+		color: inherit;
+		font: inherit;
+	}
+
+	.signup input::placeholder {
+		color: rgb(243 241 243 / 0.55);
+	}
+
+	.signup input:focus {
+		outline: none;
+	}
+
+	.signup button {
+		border: 0;
+		background: transparent;
+		color: inherit;
+		cursor: pointer;
+		padding-inline: 1rem 0;
+	}
+
+	.marks {
+		padding-top: clamp(4rem, 10vw, 8rem);
+		padding-bottom: 1.5rem;
+	}
+
+	:global(.big-wordmark) {
+		width: 100%;
+		height: auto;
+	}
+
+	.base {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		margin-top: 2rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--rule);
+		font-size: 0.625rem;
+	}
+
+	.base span:last-child {
+		margin-left: auto;
+	}
+
+	:global(.mono-mark) {
+		width: 1.75rem;
+		height: auto;
+	}
+
+	@media (max-width: 860px) {
+		.top {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.newsletter {
+			grid-column: 1 / -1;
+		}
+
+		.base {
+			flex-wrap: wrap;
+		}
+	}
+</style>

@@ -1,0 +1,46 @@
+seo:
+  title: FAQ | Elyon
+  description: Answers to common questions about the Elyon haircare system, ingredients and orders.
+eyebrow: FAQ
+heading: Straight answers.
+intro: >-
+  If your question isn't covered here, get in touch. We'll give you an honest
+  answer, even if it isn't the one that sells a product.
+groups:
+  - title: The system
+    items:
+      - question: What is the Elyon system?
+        answer: |-
+          Three products designed to work together: a cleansing shampoo, a restoring conditioner and a leave-on scalp serum. Cleanse, condition, treat.
+
+          Each product works on its own, but the system is built so the shampoo and conditioner prepare the scalp and hair, and the serum delivers concentrated actives where they're needed.
+      - question: Will Elyon regrow my hair?
+        answer: |-
+          No haircare product can promise that, and we won't. Elyon is designed to support a healthy scalp and stronger, fuller-looking hair.
+
+          If you're experiencing significant hair loss, speak to a doctor or hair loss specialist about proven medical options. Elyon is built to work alongside those treatments, not replace them.
+      - question: Can I use Elyon alongside minoxidil, finasteride or after a transplant?
+        answer: |-
+          Elyon is designed to complement medical and surgical treatments as part of your daily routine. After a transplant, always follow your surgeon's aftercare advice and check with them before introducing new products to your scalp.
+      - question: How long until I see results?
+        answer: |-
+          You'll notice how your scalp and hair feel from the first wash. Changes to the look of density and fullness take consistent use over a few months, because hair grows slowly. Consistency matters more than anything else.
+  - title: Ingredients
+    items:
+      - question: What's in the formulas?
+        answer: |-
+          Each product page lists its key ingredients and what they do. We're finalising formulations now, and full ingredient lists will be published before launch.
+      - question: What are the products free from?
+        answer: |-
+          The shampoo and conditioner are being formulated without sulfates, silicones, PEGs or parabens, so nothing builds up on your scalp between washes.
+      - question: What do they smell like?
+        answer: |-
+          Fresh and awakening, with peppermint at the centre of the system. Clean, not perfumed.
+  - title: Orders & shipping
+    items:
+      - question: When can I buy Elyon?
+        answer: |-
+          The range is launching soon. Join the community at the bottom of any page and you'll be the first to know.
+      - question: Where do you ship?
+        answer: |-
+          Elyon is made in Australia. Shipping details will be confirmed at launch.

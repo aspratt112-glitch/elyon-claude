@@ -1,0 +1,300 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getProducts, paragraphs, stepNumber, type Product } from '../../lib/content';
+
+export async function getStaticPaths() {
+	const products = await getProducts();
+	return products.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+
+interface Props {
+	product: Product;
+}
+
+const { product } = Astro.props;
+const others = (await getProducts()).filter((p) => p.slug !== product.slug);
+const comingSoon = product.status === 'coming-soon';
+
+const specs = [
+	{ label: 'Step', value: `${stepNumber(product.step)} / ${product.stepLabel}` },
+	{ label: 'Size', value: product.size || 'To be confirmed' },
+	{ label: 'Price', value: product.price || 'To be confirmed' },
+	{ label: 'Status', value: comingSoon ? 'Coming soon' : 'Available' },
+];
+---
+
+<Layout title={`${product.name} | Elyon`} description={product.seoDescription || product.summary}>
+	<div class="wrap crumbs label">
+		<a href="/#system">The System</a>
+		<span aria-hidden="true">/</span>
+		<span aria-current="page">{product.name}</span>
+	</div>
+
+	<section class="wrap product">
+		<div class="media">
+			{product.image && <img src={product.image} alt={product.name} width="1200" height="1500" fetchpriority="high" />}
+		</div>
+
+		<div class="info">
+			<p class="label bracket">{stepNumber(product.step)}&nbsp;&nbsp;{product.stepLabel}</p>
+			<h1 class="display">{product.name}</h1>
+			<p class="label notes bracket">{product.keyNotes}</p>
+			<p class="lede">{product.summary}</p>
+
+			<dl class="specs">
+				{specs.map((spec) => (
+					<div>
+						<dt class="label">{spec.label}</dt>
+						<dd>{spec.value}</dd>
+					</div>
+				))}
+			</dl>
+
+			{comingSoon ? (
+				<a class="btn" href="#newsletter">Notify me at launch</a>
+			) : (
+				<a class="btn" href="/contact">Enquire to order</a>
+			)}
+
+			<div class="prose description">
+				{paragraphs(product.description).map((p) => <p>{p}</p>)}
+			</div>
+		</div>
+	</section>
+
+	<section class="section details">
+		<div class="wrap detail-grid">
+			{product.benefits.length > 0 && (
+				<div class="block">
+					<h2 class="label bracket">What it does</h2>
+					<ul class="benefits">
+						{product.benefits.map((b) => <li>{b}</li>)}
+					</ul>
+				</div>
+			)}
+
+			{product.ingredients.length > 0 && (
+				<div class="block">
+					<h2 class="label bracket">Key ingredients</h2>
+					<dl class="ingredients">
+						{product.ingredients.map((ing) => (
+							<div>
+								<dt class="h3">{ing.title}</dt>
+								<dd class="mono">{ing.text}</dd>
+							</div>
+						))}
+					</dl>
+				</div>
+			)}
+
+			<div class="block">
+				<h2 class="label bracket">How to use</h2>
+				<div class="prose">
+					{paragraphs(product.howToUse).map((p) => <p>{p}</p>)}
+				</div>
+				<dl class="facts">
+					{product.texture && (
+						<div>
+							<dt class="label">Texture &amp; finish</dt>
+							<dd class="mono">{product.texture}</dd>
+						</div>
+					)}
+					{product.freeFrom && (
+						<div>
+							<dt class="label">Free from</dt>
+							<dd class="mono">{product.freeFrom}</dd>
+						</div>
+					)}
+				</dl>
+			</div>
+		</div>
+	</section>
+
+	<section class="section bg-moss on-dark">
+		<div class="wrap">
+			<div class="more-head">
+				<p class="label bracket">Complete the system</p>
+				<h2 class="h2">Three products. One system.</h2>
+			</div>
+			<div class="more-grid">
+				{others.map((p) => <ProductCard product={p} />)}
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.crumbs {
+		display: flex;
+		gap: 0.75rem;
+		padding-block: 1.5rem;
+	}
+
+	.crumbs a {
+		text-decoration: none;
+		opacity: 0.6;
+	}
+
+	.crumbs a:hover {
+		opacity: 1;
+	}
+
+	.product {
+		display: grid;
+		grid-template-columns: 1.1fr 1fr;
+		gap: clamp(2rem, 6vw, 6rem);
+		align-items: start;
+		padding-bottom: var(--section);
+	}
+
+	.media {
+		position: sticky;
+		top: 6rem;
+		background: var(--olive-30);
+	}
+
+	.media img {
+		width: 100%;
+		aspect-ratio: 4 / 5;
+		object-fit: cover;
+	}
+
+	.info {
+		display: grid;
+		gap: 1.5rem;
+		justify-items: start;
+		padding-top: 1rem;
+	}
+
+	.info h1 {
+		font-size: clamp(2.6rem, 5.5vw, 5rem);
+	}
+
+	.notes {
+		opacity: 0.75;
+	}
+
+	.specs {
+		width: 100%;
+		margin: 1rem 0 0.5rem;
+		border-top: 1px solid var(--rule);
+	}
+
+	.specs div {
+		display: grid;
+		grid-template-columns: 8rem 1fr;
+		padding-block: 0.9rem;
+		border-bottom: 1px solid var(--rule);
+	}
+
+	.specs dd {
+		margin: 0;
+		font-size: 0.9375rem;
+	}
+
+	.description {
+		margin-top: 2rem;
+	}
+
+	.details {
+		border-top: 1px solid var(--rule);
+	}
+
+	.detail-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: clamp(2rem, 4vw, 4rem);
+	}
+
+	.block {
+		display: grid;
+		align-content: start;
+		gap: 1.75rem;
+	}
+
+	.benefits {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: 1rem;
+	}
+
+	.benefits li {
+		display: grid;
+		grid-template-columns: 1.5rem 1fr;
+	}
+
+	.benefits li::before {
+		content: '+';
+		font-family: var(--font-mono);
+		color: var(--olive);
+	}
+
+	.ingredients,
+	.facts {
+		margin: 0;
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.ingredients div {
+		display: grid;
+		gap: 0.5rem;
+		padding-bottom: 1.5rem;
+		border-bottom: 1px solid var(--rule);
+	}
+
+	.ingredients dt {
+		font-size: 1.05rem;
+	}
+
+	dd {
+		margin: 0;
+	}
+
+	.facts {
+		margin-top: 1rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--rule);
+	}
+
+	.facts div {
+		display: grid;
+		gap: 0.4rem;
+	}
+
+	.facts dt {
+		opacity: 0.6;
+	}
+
+	.more-head {
+		display: grid;
+		gap: 1.5rem;
+		margin-bottom: clamp(2.5rem, 5vw, 4rem);
+	}
+
+	.more-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: clamp(1.5rem, 3vw, 2.5rem);
+		max-width: 1000px;
+	}
+
+	@media (max-width: 960px) {
+		.product,
+		.detail-grid,
+		.more-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.media {
+			position: static;
+		}
+
+		.detail-grid {
+			gap: 3.5rem;
+		}
+	}
+</style>

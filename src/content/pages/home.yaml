@@ -1,0 +1,43 @@
+seo:
+  title: Elyon | Premium Men's Haircare
+  description: >-
+    A three-step haircare system for men. Scientifically formulated, honestly
+    explained and designed to sit front and centre in your shower.
+hero:
+  eyebrow: No guesswork. Just science.
+  heading: Hair science for men who expect results.
+  text: >-
+    Transforming haircare from a task into a ritual, and confidence from a
+    destination into a daily practice.
+  ctaLabel: Explore the system
+  image: /images/home/bottle-detail.jpg
+system:
+  eyebrow: The system
+  heading: Three products. One complete system.
+  text: >-
+    Cleanse, condition, treat. Each product works on its own, and works best
+    together, so your routine stays simple and the results build over time.
+pillars:
+  - title: No guesswork
+    text: >-
+      Proven by science, backed by data. Every ingredient earns its place, and
+      every claim is one we can stand behind.
+  - title: About the scent
+    text: >-
+      Revitalising, awakening, sensory. Infused with peppermint for a ritual
+      that feels as good as it performs.
+  - title: The ingredients
+    text: >-
+      Actives chosen for evidence, not trends, at levels intended to make a
+      meaningful difference rather than just appear on the label.
+statement:
+  text: We like empty bottles. Not empty promises.
+  image: /images/home/lather.jpg
+story:
+  eyebrow: Our story
+  heading: Built by people who spent years telling men the truth.
+  text: >-
+    After years in the hair loss industry, we saw men offered either
+    overpromises or overcomplicated routines. Elyon is the honest alternative:
+    a system that supports your hair, and the treatments you choose, every day.
+  image: /images/home/ritual-card.jpg

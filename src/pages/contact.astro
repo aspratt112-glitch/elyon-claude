@@ -1,0 +1,141 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { reader, getSettings } from '../lib/content';
+
+const contact = await reader.singletons.contact.readOrThrow();
+const settings = await getSettings();
+---
+
+<Layout title={contact.seo.title} description={contact.seo.description}>
+	<div class="wrap layout">
+		<header class="page-head head">
+			<p class="label bracket">{contact.eyebrow}</p>
+			<h1 class="display">{contact.heading}</h1>
+			<p class="lede">{contact.intro}</p>
+
+			<dl class="details">
+				{settings.email && (
+					<div>
+						<dt class="label">Email</dt>
+						<dd><a href={`mailto:${settings.email}`}>{settings.email}</a></dd>
+					</div>
+				)}
+				{settings.instagram && (
+					<div>
+						<dt class="label">Instagram</dt>
+						<dd><a href={settings.instagram} rel="noopener">@elyon.labs</a></dd>
+					</div>
+				)}
+				<div>
+					<dt class="label">Response</dt>
+					<dd>{contact.responseTime}</dd>
+				</div>
+			</dl>
+		</header>
+
+		<form class="form" id="contact-form" data-email={settings.email}>
+			<div class="field">
+				<label class="label" for="name">Name</label>
+				<input id="name" name="name" required autocomplete="name" />
+			</div>
+			<div class="field">
+				<label class="label" for="email">Email</label>
+				<input id="email" name="email" type="email" required autocomplete="email" />
+			</div>
+			<div class="field">
+				<label class="label" for="topic">Topic</label>
+				<select id="topic" name="topic">
+					{contact.topics.map((topic) => <option>{topic}</option>)}
+				</select>
+			</div>
+			<div class="field">
+				<label class="label" for="message">Message</label>
+				<textarea id="message" name="message" required></textarea>
+			</div>
+			<button class="btn" type="submit">Send message</button>
+			<p class="mono note">Sending opens your email app with your message ready to go.</p>
+		</form>
+	</div>
+</Layout>
+
+<script>
+	// No form service is connected yet, so the message is handed to the visitor's email app.
+	const form = document.querySelector<HTMLFormElement>('#contact-form');
+	form?.addEventListener('submit', (event) => {
+		event.preventDefault();
+		const data = new FormData(form);
+		const subject = encodeURIComponent(`${data.get('topic')}: ${data.get('name')}`);
+		const body = encodeURIComponent(`${data.get('message')}\n\n${data.get('name')}\n${data.get('email')}`);
+		window.location.href = `mailto:${form.dataset.email}?subject=${subject}&body=${body}`;
+	});
+</script>
+
+<style>
+	.layout {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: clamp(2rem, 6vw, 6rem);
+		padding-bottom: var(--section);
+	}
+
+	.head {
+		justify-items: start;
+		align-content: start;
+	}
+
+	.head h1 {
+		font-size: clamp(2.6rem, 5.5vw, 5rem);
+	}
+
+	.details {
+		width: 100%;
+		margin: 1.5rem 0 0;
+		border-top: 1px solid var(--rule);
+	}
+
+	.details div {
+		display: grid;
+		grid-template-columns: 8rem 1fr;
+		padding-block: 1rem;
+		border-bottom: 1px solid var(--rule);
+	}
+
+	.details dd {
+		margin: 0;
+	}
+
+	.form {
+		display: grid;
+		gap: 2rem;
+		align-content: start;
+		padding-top: clamp(3.5rem, 9vw, 8rem);
+		justify-items: start;
+	}
+
+	.field {
+		width: 100%;
+	}
+
+	.field select {
+		background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+			linear-gradient(135deg, currentColor 50%, transparent 50%);
+		background-position: calc(100% - 10px) 50%, calc(100% - 5px) 50%;
+		background-size: 5px 5px;
+		background-repeat: no-repeat;
+	}
+
+	.note {
+		opacity: 0.6;
+	}
+
+	@media (max-width: 860px) {
+		.layout {
+			grid-template-columns: 1fr;
+			gap: 0;
+		}
+
+		.form {
+			padding-top: 0;
+		}
+	}
+</style>

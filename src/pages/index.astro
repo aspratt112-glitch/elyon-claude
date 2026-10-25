@@ -1,11 +1,260 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import Monogram from '../components/logos/Monogram.astro';
+import { reader, getProducts, stepNumber } from '../lib/content';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const home = await reader.singletons.home.readOrThrow();
+const products = await getProducts();
 ---
 
-<Layout>
-	<Welcome />
+<Layout title={home.seo.title} description={home.seo.description}>
+	<section class="hero">
+		<div class="hero-copy bg-moss on-dark">
+			<p class="label bracket">{home.hero.eyebrow}</p>
+			<h1 class="display">{home.hero.heading}</h1>
+			<div class="hero-foot">
+				<p class="lede">{home.hero.text}</p>
+				<a class="btn btn--light" href="#system">{home.hero.ctaLabel}</a>
+			</div>
+		</div>
+		<div class="hero-media">
+			{home.hero.image && <img src={home.hero.image} alt="" width="1200" height="1500" fetchpriority="high" />}
+		</div>
+	</section>
+
+	<section class="section" id="system">
+		<div class="wrap">
+			<div class="intro">
+				<p class="label bracket">{home.system.eyebrow}</p>
+				<h2 class="h2">{home.system.heading}</h2>
+				<p class="lede">{home.system.text}</p>
+			</div>
+			<div class="steps label">
+				{products.map((p) => (
+					<span>
+						<span class="bracket">{stepNumber(p.step)}</span> {p.stepLabel}
+					</span>
+				))}
+			</div>
+			<div class="grid">
+				{products.map((product) => <ProductCard product={product} />)}
+			</div>
+		</div>
+	</section>
+
+	<section class="pillars bg-espresso on-dark">
+		<div class="wrap pillar-grid">
+			{home.pillars.map((pillar, i) => (
+				<article class="pillar">
+					<p class="label bracket">{stepNumber(i + 1)}</p>
+					<h3 class="h3">{pillar.title}</h3>
+					<p class="mono">{pillar.text}</p>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<section class="statement on-dark">
+		{home.statement.image && <img src={home.statement.image} alt="" loading="lazy" />}
+		<div class="wrap statement-inner">
+			<Monogram class="statement-mark" />
+			<p class="h2">{home.statement.text}</p>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="wrap story">
+			<div class="story-media">
+				{home.story.image && <img src={home.story.image} alt="" loading="lazy" width="1200" height="780" />}
+			</div>
+			<div class="story-copy">
+				<p class="label bracket">{home.story.eyebrow}</p>
+				<h2 class="h2">{home.story.heading}</h2>
+				<p class="lede">{home.story.text}</p>
+				<a class="link-arrow" href="/story">Read our story</a>
+			</div>
+		</div>
+	</section>
 </Layout>
+
+<style>
+	.hero {
+		display: grid;
+		grid-template-columns: 1.1fr 1fr;
+		min-height: min(88vh, 900px);
+	}
+
+	.hero-copy {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 3rem;
+		padding: clamp(2.5rem, 6vw, 5.5rem) var(--gutter);
+	}
+
+	.hero-copy h1 {
+		max-width: 13ch;
+	}
+
+	.hero-foot {
+		display: grid;
+		gap: 2rem;
+		justify-items: start;
+	}
+
+	.hero-media {
+		position: relative;
+		background: var(--olive-30);
+	}
+
+	.hero-media img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 75% 50%;
+	}
+
+	.intro {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5rem 3rem;
+		align-items: end;
+	}
+
+	.intro .label {
+		grid-column: 1 / -1;
+	}
+
+	.steps {
+		display: flex;
+		gap: 2rem;
+		margin-block: clamp(2.5rem, 5vw, 4rem) 2rem;
+		padding-block: 1rem;
+		border-block: 1px solid var(--rule);
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: clamp(1.5rem, 3vw, 2.5rem);
+	}
+
+	.pillar-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.pillar {
+		display: grid;
+		align-content: start;
+		gap: 1.25rem;
+		padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 3vw, 2.5rem);
+		border-left: 1px solid var(--rule);
+	}
+
+	.pillar:first-child {
+		border-left: 0;
+		padding-left: 0;
+	}
+
+	.pillar .mono {
+		max-width: 36ch;
+		opacity: 0.85;
+	}
+
+	.statement {
+		position: relative;
+		display: grid;
+		min-height: 70vh;
+		background: var(--espresso);
+		overflow: hidden;
+	}
+
+	.statement img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		opacity: 0.45;
+		filter: saturate(0.7) contrast(1.05);
+	}
+
+	.statement-inner {
+		position: relative;
+		display: grid;
+		place-content: center;
+		justify-items: center;
+		gap: 2rem;
+		text-align: center;
+	}
+
+	.statement-inner p {
+		max-width: 16ch;
+	}
+
+	:global(.statement-mark) {
+		width: 3rem;
+		height: auto;
+	}
+
+	.story {
+		display: grid;
+		grid-template-columns: 1.2fr 1fr;
+		gap: clamp(2rem, 6vw, 6rem);
+		align-items: center;
+	}
+
+	.story-media img {
+		width: 100%;
+		aspect-ratio: 3 / 2;
+		object-fit: cover;
+	}
+
+	.story-copy {
+		display: grid;
+		gap: 1.75rem;
+		justify-items: start;
+	}
+
+	@media (max-width: 960px) {
+		.hero,
+		.story,
+		.intro {
+			grid-template-columns: 1fr;
+		}
+
+		.hero-media {
+			min-height: 70vw;
+			order: -1;
+		}
+
+		.grid,
+		.pillar-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.grid {
+			gap: 3.5rem;
+		}
+
+		.pillar,
+		.pillar:first-child {
+			border-left: 0;
+			border-top: 1px solid var(--rule);
+			padding: 2.5rem 0;
+		}
+
+		.pillar:first-child {
+			border-top: 0;
+		}
+
+		.steps {
+			justify-content: space-between;
+			gap: 1rem;
+		}
+	}
+</style>

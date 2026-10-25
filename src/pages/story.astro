@@ -1,0 +1,157 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { reader, paragraphs, stepNumber } from '../lib/content';
+
+const story = await reader.singletons.story.readOrThrow();
+---
+
+<Layout title={story.seo.title} description={story.seo.description}>
+	<header class="wrap page-head">
+		<p class="label bracket">{story.eyebrow}</p>
+		<h1 class="display">{story.heading}</h1>
+		<p class="lede">{story.intro}</p>
+	</header>
+
+	{story.image && (
+		<div class="wrap">
+			<img class="wide" src={story.image} alt="" width="2400" height="1563" fetchpriority="high" />
+		</div>
+	)}
+
+	<section class="section">
+		<div class="wrap body">
+			<p class="label bracket side">Origin</p>
+			<div class="prose">
+				{paragraphs(story.body).map((p) => <p>{p}</p>)}
+			</div>
+		</div>
+	</section>
+
+	<section class="quote bg-moss on-dark">
+		<div class="wrap quote-inner">
+			<div class="quote-copy">
+				<p class="label bracket">Our belief</p>
+				<blockquote class="display">{story.pullQuote}</blockquote>
+			</div>
+			{story.secondImage && <img src={story.secondImage} alt="" loading="lazy" width="875" height="1109" />}
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="wrap">
+			<div class="traits-head">
+				<p class="label bracket">Who we are</p>
+				<h2 class="h2">Masculine, not macho. Premium, not pretentious.</h2>
+			</div>
+			<ol class="traits">
+				{story.personality.map((trait, i) => (
+					<li>
+						<span class="label bracket">{stepNumber(i + 1)}</span>
+						<h3 class="h3">{trait.title}</h3>
+						<p class="mono">{trait.text}</p>
+					</li>
+				))}
+			</ol>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.wide {
+		width: 100%;
+		aspect-ratio: 21 / 9;
+		object-fit: cover;
+	}
+
+	.body {
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+		gap: 2rem;
+	}
+
+	.side {
+		position: sticky;
+		top: 7rem;
+		align-self: start;
+	}
+
+	.body .prose {
+		font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+		line-height: 1.6;
+	}
+
+	.body .prose p:first-child {
+		font-size: 1.35em;
+		line-height: 1.35;
+	}
+
+	.quote-inner {
+		display: grid;
+		grid-template-columns: 1.4fr 1fr;
+		gap: clamp(2rem, 6vw, 6rem);
+		align-items: center;
+		padding-block: var(--section);
+	}
+
+	.quote-copy {
+		display: grid;
+		gap: 2rem;
+	}
+
+	blockquote {
+		margin: 0;
+		max-width: 12ch;
+	}
+
+	.quote-inner img {
+		width: 100%;
+		aspect-ratio: 4 / 5;
+		object-fit: cover;
+	}
+
+	.traits-head {
+		display: grid;
+		gap: 1.5rem;
+		margin-bottom: clamp(2.5rem, 5vw, 4rem);
+	}
+
+	.traits-head h2 {
+		max-width: 20ch;
+	}
+
+	.traits {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+		border-top: 1px solid var(--rule);
+	}
+
+	.traits li {
+		display: grid;
+		align-content: start;
+		gap: 1rem;
+		padding: 2rem 1.25rem 0 0;
+	}
+
+	@media (max-width: 960px) {
+		.body,
+		.quote-inner {
+			grid-template-columns: 1fr;
+		}
+
+		.side {
+			position: static;
+		}
+
+		.traits {
+			grid-template-columns: 1fr;
+		}
+
+		.traits li {
+			padding: 2rem 0;
+			border-bottom: 1px solid var(--rule);
+		}
+	}
+</style>
