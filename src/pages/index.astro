@@ -14,7 +14,7 @@ const products = await getProducts();
 			{home.hero.image && <img src={home.hero.image} alt="" width="2400" height="1350" fetchpriority="high" />}
 		</div>
 		<div class="wrap hero-copy">
-			<p class="label bracket">{home.hero.eyebrow}</p>
+			{home.hero.eyebrow && <p class="label bracket">{home.hero.eyebrow}</p>}
 			<h1 class="display">{home.hero.heading}</h1>
 			<div class="hero-foot">
 				<p class="lede muted">{home.hero.text}</p>
@@ -127,7 +127,7 @@ const products = await getProducts();
 	}
 
 	.hero-copy h1 {
-		max-width: 15ch;
+		max-width: 20ch;
 	}
 
 	.hero-foot {
