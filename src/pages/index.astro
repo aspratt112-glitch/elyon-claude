@@ -14,11 +14,11 @@ const products = await getProducts();
 			<p class="label bracket">{home.hero.eyebrow}</p>
 			<h1 class="display">{home.hero.heading}</h1>
 			<div class="hero-foot">
-				<p class="lede">{home.hero.text}</p>
+				<p class="lede muted">{home.hero.text}</p>
 				<a class="btn btn--light" href="#system">{home.hero.ctaLabel}</a>
 			</div>
 		</div>
-		<div class="hero-media">
+		<div class="hero-media frame">
 			{home.hero.image && <img src={home.hero.image} alt="" width="1200" height="1500" fetchpriority="high" />}
 		</div>
 	</section>
@@ -26,14 +26,17 @@ const products = await getProducts();
 	<section class="section" id="system">
 		<div class="wrap">
 			<div class="intro">
-				<p class="label bracket">{home.system.eyebrow}</p>
-				<h2 class="h2">{home.system.heading}</h2>
-				<p class="lede">{home.system.text}</p>
+				<div class="stack">
+					<p class="label bracket muted">{home.system.eyebrow}</p>
+					<h2 class="h2">{home.system.heading}</h2>
+				</div>
+				<p class="lede muted">{home.system.text}</p>
 			</div>
 			<div class="steps label">
 				{products.map((p) => (
 					<span>
-						<span class="bracket">{stepNumber(p.step)}</span> {p.stepLabel}
+						<span class="bracket">{stepNumber(p.step)}</span>
+						<span class="muted">{p.stepLabel}</span>
 					</span>
 				))}
 			</div>
@@ -43,15 +46,16 @@ const products = await getProducts();
 		</div>
 	</section>
 
-	<section class="pillars bg-espresso on-dark">
-		<div class="wrap pillar-grid">
-			{home.pillars.map((pillar, i) => (
-				<article class="pillar">
-					<p class="label bracket">{stepNumber(i + 1)}</p>
-					<h3 class="h3">{pillar.title}</h3>
-					<p class="mono">{pillar.text}</p>
-				</article>
-			))}
+	<section class="pillars on-dark">
+		<div class="wrap">
+			<div class="pillar-grid">
+				{home.pillars.map((pillar) => (
+					<article class="pillar stack">
+						<h3 class="h3">{pillar.title}</h3>
+						<p class="mono">{pillar.text}</p>
+					</article>
+				))}
+			</div>
 		</div>
 	</section>
 
@@ -65,13 +69,13 @@ const products = await getProducts();
 
 	<section class="section">
 		<div class="wrap story">
-			<div class="story-media">
-				{home.story.image && <img src={home.story.image} alt="" loading="lazy" width="1200" height="780" />}
+			<div class="frame ratio-landscape">
+				{home.story.image && <img src={home.story.image} alt="" loading="lazy" width="1200" height="800" />}
 			</div>
-			<div class="story-copy">
-				<p class="label bracket">{home.story.eyebrow}</p>
+			<div class="stack story-copy">
+				<p class="label bracket muted">{home.story.eyebrow}</p>
 				<h2 class="h2">{home.story.heading}</h2>
-				<p class="lede">{home.story.text}</p>
+				<p class="lede muted">{home.story.text}</p>
 				<a class="link-arrow" href="/story">Read our story</a>
 			</div>
 		</div>
@@ -81,77 +85,86 @@ const products = await getProducts();
 <style>
 	.hero {
 		display: grid;
-		grid-template-columns: 1.1fr 1fr;
-		min-height: min(88vh, 900px);
+		grid-template-columns: 1fr 1fr;
+		min-height: min(90vh, 920px);
 	}
 
 	.hero-copy {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		gap: 3rem;
-		padding: clamp(2.5rem, 6vw, 5.5rem) var(--gutter);
+		gap: var(--space-5);
+		padding: var(--space-6) var(--gutter) var(--space-5);
 	}
 
 	.hero-copy h1 {
-		max-width: 13ch;
+		max-width: 15ch;
+		margin-top: auto;
 	}
 
 	.hero-foot {
 		display: grid;
-		gap: 2rem;
+		gap: var(--space-4);
 		justify-items: start;
-	}
-
-	.hero-media {
-		position: relative;
-		background: var(--olive-30);
+		padding-top: var(--space-4);
+		border-top: 1px solid var(--rule);
 	}
 
 	.hero-media img {
 		position: absolute;
 		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
 		object-position: 75% 50%;
 	}
 
 	.intro {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 1.5rem 3rem;
+		gap: var(--space-4) var(--space-5);
 		align-items: end;
-	}
-
-	.intro .label {
-		grid-column: 1 / -1;
 	}
 
 	.steps {
 		display: flex;
-		gap: 2rem;
-		margin-block: clamp(2.5rem, 5vw, 4rem) 2rem;
-		padding-block: 1rem;
+		gap: var(--space-5);
+		margin-block: var(--space-5) var(--space-4);
+		padding-block: var(--space-2);
 		border-block: 1px solid var(--rule);
+	}
+
+	.steps > span {
+		display: inline-flex;
+		gap: var(--space-2);
 	}
 
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: clamp(1.5rem, 3vw, 2.5rem);
+		gap: var(--space-4);
+	}
+
+	/* Moss at 80% (#63655a), easing into Espresso so it runs straight into the statement band.
+	   Only full Mineral White passes AA on this tint (5.3:1), so muted text is lifted here. */
+	.pillars {
+		--moss-80: #63655a;
+		--ink-muted: var(--mineral);
+		padding-block: var(--section) calc(var(--section) * 1.5);
+		background: linear-gradient(
+			to bottom,
+			var(--moss-80) 0%,
+			var(--moss-80) 45%,
+			color-mix(in srgb, var(--moss-80), var(--espresso) 50%) 75%,
+			var(--espresso) 100%
+		);
 	}
 
 	.pillar-grid {
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
+		border-block: 1px solid var(--rule);
 	}
 
 	.pillar {
-		display: grid;
-		align-content: start;
-		gap: 1.25rem;
-		padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 3vw, 2.5rem);
+		padding: var(--space-5) var(--space-4);
 		border-left: 1px solid var(--rule);
 	}
 
@@ -160,27 +173,36 @@ const products = await getProducts();
 		padding-left: 0;
 	}
 
+	.pillar:last-child {
+		padding-right: 0;
+	}
+
 	.pillar .mono {
-		max-width: 36ch;
-		opacity: 0.85;
+		max-width: 38ch;
 	}
 
 	.statement {
 		position: relative;
 		display: grid;
-		min-height: 70vh;
+		min-height: min(72vh, 760px);
+		/* Overlap by 1px so sub-pixel rounding can't open a seam with the gradient above */
+		margin-top: -1px;
 		background: var(--espresso);
 		overflow: hidden;
 	}
 
+	/* The source image is low resolution, so it's softened into texture */
 	.statement img {
 		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
+		inset: -12px;
+		width: calc(100% + 24px);
+		height: calc(100% + 24px);
 		object-fit: cover;
-		opacity: 0.45;
-		filter: saturate(0.7) contrast(1.05);
+		opacity: 0.22;
+		filter: blur(3px) saturate(0.6);
+		/* Fade the texture in from plain Espresso so there's no seam with the section above */
+		-webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 45%);
+		mask-image: linear-gradient(to bottom, transparent 0%, #000 45%);
 	}
 
 	.statement-inner {
@@ -188,36 +210,33 @@ const products = await getProducts();
 		display: grid;
 		place-content: center;
 		justify-items: center;
-		gap: 2rem;
+		gap: var(--space-4);
+		padding-block: var(--space-6);
 		text-align: center;
 	}
 
 	.statement-inner p {
-		max-width: 16ch;
+		max-width: 18ch;
 	}
 
 	:global(.statement-mark) {
-		width: 3rem;
+		width: 2.5rem;
 		height: auto;
 	}
 
 	.story {
 		display: grid;
-		grid-template-columns: 1.2fr 1fr;
-		gap: clamp(2rem, 6vw, 6rem);
+		grid-template-columns: 7fr 5fr;
+		gap: var(--space-6);
 		align-items: center;
 	}
 
-	.story-media img {
-		width: 100%;
-		aspect-ratio: 3 / 2;
-		object-fit: cover;
+	.story-copy {
+		gap: var(--space-3);
 	}
 
-	.story-copy {
-		display: grid;
-		gap: 1.75rem;
-		justify-items: start;
+	.story-copy .link-arrow {
+		margin-top: var(--space-2);
 	}
 
 	@media (max-width: 960px) {
@@ -228,8 +247,12 @@ const products = await getProducts();
 		}
 
 		.hero-media {
-			min-height: 70vw;
+			min-height: 75vw;
 			order: -1;
+		}
+
+		.hero-copy h1 {
+			margin-top: 0;
 		}
 
 		.grid,
@@ -238,14 +261,15 @@ const products = await getProducts();
 		}
 
 		.grid {
-			gap: 3.5rem;
+			gap: var(--space-5);
 		}
 
 		.pillar,
-		.pillar:first-child {
+		.pillar:first-child,
+		.pillar:last-child {
 			border-left: 0;
 			border-top: 1px solid var(--rule);
-			padding: 2.5rem 0;
+			padding: var(--space-4) 0;
 		}
 
 		.pillar:first-child {
@@ -254,7 +278,11 @@ const products = await getProducts();
 
 		.steps {
 			justify-content: space-between;
-			gap: 1rem;
+			gap: var(--space-2);
+		}
+
+		.story {
+			gap: var(--space-4);
 		}
 	}
 </style>

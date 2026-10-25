@@ -8,16 +8,16 @@ const faq = await reader.singletons.faq.readOrThrow();
 <Layout title={faq.seo.title} description={faq.seo.description}>
 	<div class="wrap layout">
 		<header class="page-head head">
-			<p class="label bracket">{faq.eyebrow}</p>
+			<p class="label bracket muted">{faq.eyebrow}</p>
 			<h1 class="display">{faq.heading}</h1>
-			<p class="lede">{faq.intro}</p>
+			<p class="lede muted">{faq.intro}</p>
 			<a class="link-arrow" href="/contact">Ask us directly</a>
 		</header>
 
 		<div class="groups">
 			{faq.groups.map((group) => (
 				<section class="group">
-					<h2 class="label bracket">{group.title}</h2>
+					<h2 class="label bracket muted">{group.title}</h2>
 					{group.items.map((item) => (
 						<details>
 							<summary>
@@ -50,19 +50,14 @@ const faq = await reader.singletons.faq.readOrThrow();
 		justify-items: start;
 	}
 
-	.head h1 {
-		font-size: clamp(2.6rem, 5.5vw, 5rem);
-	}
-
 	.groups {
 		display: grid;
-		gap: 4rem;
-		padding-top: clamp(3.5rem, 9vw, 8rem);
+		gap: var(--space-5);
+		padding-top: var(--space-6);
 	}
 
 	.group h2 {
-		margin-bottom: 1rem;
-		opacity: 0.6;
+		margin-bottom: var(--space-2);
 	}
 
 	details {

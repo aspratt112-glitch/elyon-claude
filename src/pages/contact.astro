@@ -9,25 +9,25 @@ const settings = await getSettings();
 <Layout title={contact.seo.title} description={contact.seo.description}>
 	<div class="wrap layout">
 		<header class="page-head head">
-			<p class="label bracket">{contact.eyebrow}</p>
+			<p class="label bracket muted">{contact.eyebrow}</p>
 			<h1 class="display">{contact.heading}</h1>
-			<p class="lede">{contact.intro}</p>
+			<p class="lede muted">{contact.intro}</p>
 
 			<dl class="details">
 				{settings.email && (
 					<div>
-						<dt class="label">Email</dt>
+						<dt class="label muted">Email</dt>
 						<dd><a href={`mailto:${settings.email}`}>{settings.email}</a></dd>
 					</div>
 				)}
 				{settings.instagram && (
 					<div>
-						<dt class="label">Instagram</dt>
+						<dt class="label muted">Instagram</dt>
 						<dd><a href={settings.instagram} rel="noopener">@elyon.labs</a></dd>
 					</div>
 				)}
 				<div>
-					<dt class="label">Response</dt>
+					<dt class="label muted">Response</dt>
 					<dd>{contact.responseTime}</dd>
 				</div>
 			</dl>
@@ -83,13 +83,9 @@ const settings = await getSettings();
 		align-content: start;
 	}
 
-	.head h1 {
-		font-size: clamp(2.6rem, 5.5vw, 5rem);
-	}
-
 	.details {
 		width: 100%;
-		margin: 1.5rem 0 0;
+		margin: var(--space-3) 0 0;
 		border-top: 1px solid var(--rule);
 	}
 
@@ -108,7 +104,7 @@ const settings = await getSettings();
 		display: grid;
 		gap: 2rem;
 		align-content: start;
-		padding-top: clamp(3.5rem, 9vw, 8rem);
+		padding-top: var(--space-6);
 		justify-items: start;
 	}
 
@@ -122,10 +118,6 @@ const settings = await getSettings();
 		background-position: calc(100% - 10px) 50%, calc(100% - 5px) 50%;
 		background-size: 5px 5px;
 		background-repeat: no-repeat;
-	}
-
-	.note {
-		opacity: 0.6;
 	}
 
 	@media (max-width: 860px) {
