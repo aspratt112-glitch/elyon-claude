@@ -8,18 +8,18 @@ const home = await reader.singletons.home.readOrThrow();
 const products = await getProducts();
 ---
 
-<Layout title={home.seo.title} description={home.seo.description}>
-	<section class="hero">
-		<div class="hero-copy bg-moss on-dark">
+<Layout title={home.seo.title} description={home.seo.description} overlayHeader>
+	<section class="hero on-dark" data-header-overlay>
+		<div class="hero-media">
+			{home.hero.image && <img src={home.hero.image} alt="" width="2400" height="1350" fetchpriority="high" />}
+		</div>
+		<div class="wrap hero-copy">
 			<p class="label bracket">{home.hero.eyebrow}</p>
 			<h1 class="display">{home.hero.heading}</h1>
 			<div class="hero-foot">
 				<p class="lede muted">{home.hero.text}</p>
 				<a class="btn btn--light" href="#system">{home.hero.ctaLabel}</a>
 			</div>
-		</div>
-		<div class="hero-media frame">
-			{home.hero.image && <img src={home.hero.image} alt="" width="1200" height="1500" fetchpriority="high" />}
 		</div>
 	</section>
 
@@ -83,37 +83,61 @@ const products = await getProducts();
 </Layout>
 
 <style>
+	/* Full-bleed banner that runs up behind the transparent menu */
 	.hero {
+		position: relative;
 		display: grid;
-		grid-template-columns: 1fr 1fr;
-		min-height: min(90vh, 920px);
+		align-items: end;
+		min-height: min(100svh, 1000px);
+		margin-top: calc(-1 * var(--header-h) - 1px);
+		background: var(--espresso);
+		overflow: hidden;
+	}
+
+	.hero-media {
+		position: absolute;
+		inset: 0;
+	}
+
+	.hero-media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 70% 40%;
+	}
+
+	/* Darkens the top (for the menu) and the lower left (for the copy) */
+	.hero-media::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background:
+			linear-gradient(to bottom, rgb(61 47 48 / 0.6) 0%, rgb(61 47 48 / 0) 28%),
+			linear-gradient(to top, rgb(61 47 48 / 0.7) 0%, rgb(61 47 48 / 0) 55%),
+			linear-gradient(to right, rgb(61 47 48 / 0.55) 0%, rgb(61 47 48 / 0) 65%);
 	}
 
 	.hero-copy {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		gap: var(--space-5);
-		padding: var(--space-6) var(--gutter) var(--space-5);
+		position: relative;
+		display: grid;
+		gap: var(--space-3);
+		justify-items: start;
+		padding-top: calc(var(--header-h) + var(--space-6));
+		padding-bottom: var(--space-5);
 	}
 
 	.hero-copy h1 {
 		max-width: 15ch;
-		margin-top: auto;
 	}
 
 	.hero-foot {
 		display: grid;
 		gap: var(--space-4);
 		justify-items: start;
+		width: min(100%, 34rem);
+		margin-top: var(--space-3);
 		padding-top: var(--space-4);
 		border-top: 1px solid var(--rule);
-	}
-
-	.hero-media img {
-		position: absolute;
-		inset: 0;
-		object-position: 75% 50%;
 	}
 
 	.intro {
@@ -249,19 +273,17 @@ const products = await getProducts();
 	}
 
 	@media (max-width: 960px) {
-		.hero,
 		.story,
 		.intro {
 			grid-template-columns: 1fr;
 		}
 
-		.hero-media {
-			min-height: 75vw;
-			order: -1;
+		.hero {
+			min-height: min(100svh, 760px);
 		}
 
-		.hero-copy h1 {
-			margin-top: 0;
+		.hero-media img {
+			object-position: 72% 50%;
 		}
 
 		.grid,
