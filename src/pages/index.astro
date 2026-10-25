@@ -23,7 +23,7 @@ const products = await getProducts();
 		</div>
 	</section>
 
-	<section class="section" id="system">
+	<section class="section system" id="system">
 		<div class="wrap">
 			<div class="intro">
 				<div class="stack">
@@ -142,17 +142,26 @@ const products = await getProducts();
 		gap: var(--space-4);
 	}
 
-	/* Moss at 80% (#63655a), easing into Espresso so it runs straight into the statement band.
-	   Only full Mineral White passes AA on this tint (5.3:1), so muted text is lifted here. */
+	/* The section above hands its bottom spacing to the pillars' fade-in */
+	.system {
+		padding-bottom: var(--space-5);
+	}
+
+	/* Moss at 80% (#63655a): fades in from Mineral White, then eases into Espresso so it
+	   runs straight into the statement band. The fades sit in the padding, so text only
+	   ever sits on solid Moss. Only full Mineral White passes AA on this tint (5.3:1). */
 	.pillars {
 		--moss-80: #63655a;
+		--fade-in: calc(var(--section) * 1.1);
 		--ink-muted: var(--mineral);
-		padding-block: var(--section) calc(var(--section) * 1.5);
+		padding-block: calc(var(--fade-in) + var(--space-5)) calc(var(--section) * 1.5);
 		background: linear-gradient(
 			to bottom,
-			var(--moss-80) 0%,
-			var(--moss-80) 45%,
-			color-mix(in srgb, var(--moss-80), var(--espresso) 50%) 75%,
+			var(--paper) 0,
+			color-mix(in srgb, var(--paper), var(--moss-80) 50%) calc(var(--fade-in) * 0.5),
+			var(--moss-80) var(--fade-in),
+			var(--moss-80) 55%,
+			color-mix(in srgb, var(--moss-80), var(--espresso) 50%) 78%,
 			var(--espresso) 100%
 		);
 	}
