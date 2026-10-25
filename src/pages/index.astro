@@ -103,18 +103,20 @@ const products = await getProducts();
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		object-position: 70% 40%;
+		/* Anchored to the bottom so the ELYON on the bottle sits as high as the crop allows */
+		object-position: 70% 100%;
 	}
 
-	/* Darkens the top (for the menu) and the lower left (for the copy) */
+	/* Darkens the top (for the menu) and the left (for the copy); the bottom stays light
+	   on the right so the bottle's ELYON lettering isn't shaded out */
 	.hero-media::after {
 		content: '';
 		position: absolute;
 		inset: 0;
 		background:
 			linear-gradient(to bottom, rgb(61 47 48 / 0.6) 0%, rgb(61 47 48 / 0) 28%),
-			linear-gradient(to top, rgb(61 47 48 / 0.7) 0%, rgb(61 47 48 / 0) 55%),
-			linear-gradient(to right, rgb(61 47 48 / 0.55) 0%, rgb(61 47 48 / 0) 65%);
+			linear-gradient(to top, rgb(61 47 48 / 0.3) 0%, rgb(61 47 48 / 0) 35%),
+			linear-gradient(to right, rgb(61 47 48 / 0.7) 0%, rgb(61 47 48 / 0.35) 40%, rgb(61 47 48 / 0) 60%);
 	}
 
 	.hero-copy {
@@ -284,6 +286,14 @@ const products = await getProducts();
 
 		.hero-media img {
 			object-position: 72% 50%;
+		}
+
+		/* Copy spans the full width on mobile, so the lower half stays shaded */
+		.hero-media::after {
+			background:
+				linear-gradient(to bottom, rgb(61 47 48 / 0.6) 0%, rgb(61 47 48 / 0) 28%),
+				linear-gradient(to top, rgb(61 47 48 / 0.7) 0%, rgb(61 47 48 / 0) 55%),
+				linear-gradient(to right, rgb(61 47 48 / 0.55) 0%, rgb(61 47 48 / 0) 65%);
 		}
 
 		.grid,

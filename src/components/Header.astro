@@ -10,6 +10,7 @@ interface Props {
 
 const { overlay = false } = Astro.props;
 const settings = await getSettings();
+const [mainMessage, ...otherMessages] = settings.announcements;
 const products = await getProducts();
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
@@ -27,7 +28,12 @@ const isCurrent = (href: string) => href === path;
 
 <div class="announce bg-espresso on-dark">
 	<ul class="wrap label">
-		{settings.announcements.map((message) => <li>{message}</li>)}
+		{mainMessage && <li class="announce-main">{mainMessage}</li>}
+		{otherMessages.length > 0 && (
+			<li class="announce-rest">
+				{otherMessages.map((message) => <span>{message}</span>)}
+			</li>
+		)}
 	</ul>
 </div>
 
@@ -96,14 +102,28 @@ const isCurrent = (href: string) => href === path;
 </script>
 
 <style>
+	/* First message sits in the true centre; any others line up on the right */
 	.announce ul {
-		display: flex;
-		justify-content: space-between;
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
+		align-items: center;
 		gap: 2rem;
 		margin: 0 auto;
 		padding-block: 0.6rem;
 		list-style: none;
 		font-size: 0.625rem;
+	}
+
+	.announce-main {
+		grid-column: 2;
+		text-align: center;
+	}
+
+	.announce-rest {
+		grid-column: 3;
+		justify-self: end;
+		display: flex;
+		gap: 2rem;
 	}
 
 	.site-header {
@@ -165,12 +185,8 @@ const isCurrent = (href: string) => href === path;
 	}
 
 	@media (max-width: 860px) {
-		.announce li:not(:first-child) {
+		.announce-rest {
 			display: none;
-		}
-
-		.announce ul {
-			justify-content: center;
 		}
 
 		.bar {

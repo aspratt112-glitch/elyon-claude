@@ -52,7 +52,8 @@ export default config({
 			schema: {
 				announcements: fields.array(fields.text({ label: 'Message' }), {
 					label: 'Announcement bar',
-					description: 'Short messages shown across the top of every page.',
+					description:
+						'Short messages across the top of every page. The first is centred (and is the only one shown on mobile); the rest sit on the right on desktop.',
 					itemLabel: (props) => props.value,
 				}),
 				email: fields.text({ label: 'Contact email' }),
