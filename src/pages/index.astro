@@ -124,6 +124,13 @@ const products = await getProducts();
 		max-width: 20ch;
 	}
 
+	/* A quieter headline on desktop; mobile keeps the standard display size */
+	@media (min-width: 961px) {
+		.hero-copy h1 {
+			font-size: clamp(2.5rem, 3.6vw, 3.25rem);
+		}
+	}
+
 	.hero-foot {
 		display: grid;
 		gap: var(--space-4);
