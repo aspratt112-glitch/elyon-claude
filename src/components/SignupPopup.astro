@@ -54,39 +54,16 @@ const settings = await getSettings();
 </dialog>
 
 <script>
-	// Opens shortly after the home page loads. Closing it keeps it away for a week;
-	// signing up keeps it away for good.
-	const KEY = 'elyon-signup-popup';
-	const WEEK = 7 * 24 * 60 * 60 * 1000;
-
+	// Opens shortly after every load of the home page.
 	const dialog = document.querySelector<HTMLDialogElement>('.signup-popup');
 	const form = dialog?.querySelector('form');
 
-	const remember = (value: string) => {
-		try {
-			localStorage.setItem(KEY, value);
-		} catch {}
-	};
-
-	const shouldShow = () => {
-		try {
-			const saved = localStorage.getItem(KEY);
-			if (saved === 'joined') return false;
-			if (saved && Date.now() - Number(saved) < WEEK) return false;
-		} catch {}
-		return true;
-	};
-
-	if (dialog && form && shouldShow()) {
+	if (dialog && form) {
 		setTimeout(() => dialog.showModal(), 1200);
 
-		const close = () => {
-			remember(String(Date.now()));
-			dialog.close();
-		};
+		const close = () => dialog.close();
 
 		dialog.querySelectorAll('[data-close]').forEach((button) => button.addEventListener('click', close));
-		dialog.addEventListener('cancel', () => remember(String(Date.now())));
 		// Clicking the dimmed backdrop (the dialog element itself) closes it
 		dialog.addEventListener('click', (event) => {
 			if (event.target === dialog) close();
@@ -99,7 +76,6 @@ const settings = await getSettings();
 			const name = `${data.get('firstName')} ${data.get('lastName')}`.trim();
 			const subject = encodeURIComponent('Join the Elyon community');
 			const body = encodeURIComponent(`Please add ${name} (${data.get('email')}) to the Elyon launch list.`);
-			remember('joined');
 			dialog.close();
 			window.location.href = `mailto:${dialog.dataset.email}?subject=${subject}&body=${body}`;
 		});

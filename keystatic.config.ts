@@ -116,7 +116,7 @@ export default config({
 					{
 						label: 'Sign-up popup',
 						description:
-							'Opens shortly after the home page loads. Closing it hides it for a week; signing up hides it for good.',
+							'Opens shortly after the home page loads, every time it loads.',
 					},
 				),
 			},
