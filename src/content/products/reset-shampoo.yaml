@@ -1,18 +1,21 @@
-name: Cleansing Shampoo
+name: Reset Shampoo
 step: 1
-stepLabel: Cleanse
+stepLabel: Reset
 keyNotes: Peppermint + Charcoal
 summary: >-
   Clears build-up at the scalp without stripping. Prepares the follicle
   environment for everything that follows.
 status: coming-soon
-price: ''
-size: ''
-image: /images/products/cleansing-shampoo/image.jpg
-description: |-
-  Most men's shampoos either under-cleanse, leaving build-up behind, or over-cleanse, stripping the scalp and triggering more oil in response. This formula does neither.
+image: /images/products/reset-shampoo/image.png
+description: >-
+  Most men's shampoos either under-cleanse, leaving build-up behind, or
+  over-cleanse, stripping the scalp and triggering more oil in response. This
+  formula does neither.
 
-  A gentle, sulfate-free cleanse lifts excess oil, product residue and everyday pollutants, while activated charcoal helps draw out impurities. Your scalp is left balanced and reset, ready for step two.
+
+  A gentle, sulfate-free cleanse lifts excess oil, product residue and everyday
+  pollutants, while activated charcoal helps draw out impurities. Your scalp is
+  left balanced and reset, ready for step two.
 benefits:
   - Helps deeply cleanse the scalp of excess oil and product build-up
   - Helps rebalance and soothe the scalp environment
@@ -20,15 +23,19 @@ benefits:
   - Sulfate-free and suitable for regular use
 ingredients:
   - title: Activated charcoal
-    text: Highly porous carbon that helps adsorb excess oil, residue and pollutants before they're rinsed away.
+    text: >-
+      Highly porous carbon that helps adsorb excess oil, residue and pollutants
+      before they're rinsed away.
   - title: Saw palmetto + zinc PCA
     text: A dual approach to scalp oil regulation, supporting a balanced scalp.
   - title: Baobab + quinoa protein
     text: Plant proteins that help reinforce the hair shaft while you cleanse.
   - title: Caffeine
     text: Supports scalp microcirculation for a well-nourished follicle environment.
-howToUse: |-
-  Massage into wet hair, focusing on the scalp. Leave for a minute, then rinse thoroughly. Use 2–3 times per week, or as often as you wash. Follow with the Restore Conditioner.
+howToUse: >-
+  Massage into wet hair, focusing on the scalp. Leave for a minute, then rinse
+  thoroughly. Use 2–3 times per week, or as often as you wash. Follow with the
+  Restore Conditioner.
 texture: Lightweight gel that lathers clean. Scalp feels balanced and reset.
 freeFrom: Sulfates, silicones, PEGs, parabens
 seoDescription: >-
