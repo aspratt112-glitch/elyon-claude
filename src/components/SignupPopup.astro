@@ -1,0 +1,245 @@
+---
+import Monogram from './logos/Monogram.astro';
+import { getSettings } from '../lib/content';
+
+interface Props {
+	eyebrow?: string | null;
+	heading?: string | null;
+	text?: string | null;
+	buttonLabel?: string | null;
+	image?: string | null;
+}
+
+const { eyebrow, heading, text, buttonLabel, image } = Astro.props;
+const settings = await getSettings();
+---
+
+<dialog class="signup-popup bg-espresso on-dark" aria-labelledby="signup-popup-heading" data-email={settings.email}>
+	<div class="shell" class:list={{ 'has-image': image }}>
+		{image && (
+			<div class="media">
+				<img src={image} alt="" loading="lazy" />
+			</div>
+		)}
+
+		<form class="body" method="dialog">
+			<button class="close label" type="button" data-close aria-label="Close">Close ✕</button>
+
+			<div class="stack">
+				<Monogram class="popup-mark" />
+				{eyebrow && <p class="label bracket muted">{eyebrow}</p>}
+				<h2 class="h2" id="signup-popup-heading">{heading}</h2>
+				{text && <p class="mono">{text}</p>}
+			</div>
+
+			<div class="fields">
+				<div class="field">
+					<label class="label muted" for="popup-first-name">First name</label>
+					<input id="popup-first-name" name="firstName" type="text" required autocomplete="given-name" />
+				</div>
+				<div class="field">
+					<label class="label muted" for="popup-last-name">Last name</label>
+					<input id="popup-last-name" name="lastName" type="text" required autocomplete="family-name" />
+				</div>
+				<div class="field field--full">
+					<label class="label muted" for="popup-email">Email</label>
+					<input id="popup-email" name="email" type="email" required autocomplete="email" />
+				</div>
+			</div>
+
+			<button class="btn btn--light submit" type="submit">{buttonLabel || 'Join'}</button>
+			<button class="later label" type="button" data-close>No thanks</button>
+		</form>
+	</div>
+</dialog>
+
+<script>
+	// Opens shortly after the home page loads. Closing it keeps it away for a week;
+	// signing up keeps it away for good.
+	const KEY = 'elyon-signup-popup';
+	const WEEK = 7 * 24 * 60 * 60 * 1000;
+
+	const dialog = document.querySelector<HTMLDialogElement>('.signup-popup');
+	const form = dialog?.querySelector('form');
+
+	const remember = (value: string) => {
+		try {
+			localStorage.setItem(KEY, value);
+		} catch {}
+	};
+
+	const shouldShow = () => {
+		try {
+			const saved = localStorage.getItem(KEY);
+			if (saved === 'joined') return false;
+			if (saved && Date.now() - Number(saved) < WEEK) return false;
+		} catch {}
+		return true;
+	};
+
+	if (dialog && form && shouldShow()) {
+		setTimeout(() => dialog.showModal(), 1200);
+
+		const close = () => {
+			remember(String(Date.now()));
+			dialog.close();
+		};
+
+		dialog.querySelectorAll('[data-close]').forEach((button) => button.addEventListener('click', close));
+		dialog.addEventListener('cancel', () => remember(String(Date.now())));
+		// Clicking the dimmed backdrop (the dialog element itself) closes it
+		dialog.addEventListener('click', (event) => {
+			if (event.target === dialog) close();
+		});
+
+		// No mailing list provider is connected yet, so sign-ups open a pre-filled email.
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const data = new FormData(form);
+			const name = `${data.get('firstName')} ${data.get('lastName')}`.trim();
+			const subject = encodeURIComponent('Join the Elyon community');
+			const body = encodeURIComponent(`Please add ${name} (${data.get('email')}) to the Elyon launch list.`);
+			remember('joined');
+			dialog.close();
+			window.location.href = `mailto:${dialog.dataset.email}?subject=${subject}&body=${body}`;
+		});
+	}
+</script>
+
+<style>
+	.signup-popup {
+		width: min(100% - 2rem, 44rem);
+		max-height: calc(100dvh - 2rem);
+		padding: 0;
+		border: 1px solid var(--rule);
+		border-radius: 0;
+		color: var(--mineral);
+		overflow: auto;
+	}
+
+	.signup-popup[open] {
+		animation: popup-in 0.5s ease both;
+	}
+
+	.signup-popup::backdrop {
+		background: rgb(61 47 48 / 0.6);
+		backdrop-filter: blur(2px);
+	}
+
+	@keyframes popup-in {
+		from {
+			opacity: 0;
+			transform: translateY(12px);
+		}
+	}
+
+	.shell.has-image {
+		display: grid;
+		grid-template-columns: 2fr 3fr;
+	}
+
+	.media {
+		position: relative;
+		background: var(--moss);
+	}
+
+	.media img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 70% 100%;
+	}
+
+	.body {
+		position: relative;
+		display: grid;
+		gap: var(--space-3);
+		padding: var(--space-4) clamp(1.25rem, 3vw, 2.25rem) var(--space-3);
+	}
+
+	.body .h2 {
+		font-size: clamp(1.35rem, 2vw, 1.75rem);
+	}
+
+	.body .stack {
+		gap: var(--space-2);
+	}
+
+	.body .mono {
+		max-width: 42ch;
+		font-size: 0.75rem;
+	}
+
+	:global(.popup-mark) {
+		width: 1.4rem;
+		height: auto;
+	}
+
+	.close {
+		position: absolute;
+		top: var(--space-2);
+		right: var(--space-3);
+		padding: 0.5rem 0;
+		border: 0;
+		background: transparent;
+		color: inherit;
+		cursor: pointer;
+	}
+
+	.fields {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-2) var(--space-3);
+	}
+
+	.fields input {
+		padding-block: 0.55rem;
+		font-size: 0.9375rem;
+	}
+
+	.field--full {
+		grid-column: 1 / -1;
+	}
+
+	.submit {
+		width: 100%;
+		min-height: 3rem;
+	}
+
+	.later {
+		justify-self: center;
+		margin-top: calc(var(--space-1) * -1);
+		padding: 0.5rem 0;
+		border: 0;
+		border-bottom: 1px solid var(--rule-strong);
+		background: transparent;
+		color: var(--ink-muted);
+		cursor: pointer;
+	}
+
+	.later:hover {
+		color: var(--mineral);
+	}
+
+	@media (max-width: 720px) {
+		.shell.has-image {
+			grid-template-columns: 1fr;
+		}
+
+		.media {
+			display: none;
+		}
+
+		.fields {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.signup-popup[open] {
+			animation: none;
+		}
+	}
+</style>

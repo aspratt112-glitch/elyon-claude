@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import ProductCard from '../components/ProductCard.astro';
 import Monogram from '../components/logos/Monogram.astro';
+import SignupPopup from '../components/SignupPopup.astro';
 import { reader, getProducts } from '../lib/content';
 
 const home = await reader.singletons.home.readOrThrow();
@@ -72,6 +73,8 @@ const products = await getProducts();
 			</div>
 		</div>
 	</section>
+
+	{home.popup.enabled && <SignupPopup {...home.popup} />}
 </Layout>
 
 <style>

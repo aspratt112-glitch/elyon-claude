@@ -104,6 +104,21 @@ export default config({
 					},
 					{ label: 'Story teaser' },
 				),
+				popup: fields.object(
+					{
+						enabled: fields.checkbox({ label: 'Show the sign-up popup', defaultValue: true }),
+						eyebrow: fields.text({ label: 'Label' }),
+						heading: fields.text({ label: 'Heading' }),
+						text: fields.text({ label: 'Text', multiline: true }),
+						buttonLabel: fields.text({ label: 'Button label' }),
+						image: image('Image (desktop only)', 'home'),
+					},
+					{
+						label: 'Sign-up popup',
+						description:
+							'Opens shortly after the home page loads. Closing it hides it for a week; signing up hides it for good.',
+					},
+				),
 			},
 		}),
 		story: singleton({

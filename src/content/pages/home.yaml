@@ -41,3 +41,12 @@ story:
     overpromises or overcomplicated routines. Elyon is the honest alternative:
     a system that supports your hair, and the treatments you choose, every day.
   image: /images/home/ritual-card.jpg
+popup:
+  enabled: true
+  eyebrow: Join the community
+  heading: Be first in line.
+  text: >-
+    Three products. One system. Sign up to hear when Elyon launches, and get
+    early access before anyone else.
+  buttonLabel: Join the list
+  image: /images/home/bottle-detail.jpg
