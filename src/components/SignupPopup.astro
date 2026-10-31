@@ -201,11 +201,25 @@ const settings = await getSettings();
 
 	@media (max-width: 720px) {
 		.shell.has-image {
+			position: relative;
 			grid-template-columns: 1fr;
 		}
 
+		/* On phones the photo sits behind the form at half strength */
 		.media {
-			display: none;
+			position: absolute;
+			inset: 0;
+			opacity: 0.5;
+		}
+
+		.media img {
+			object-position: 40% 50%;
+		}
+
+		/* Over the photo, the softer grey text loses contrast, so it all goes full Mineral White */
+		.body {
+			--ink-muted: var(--mineral);
+			text-shadow: 0 1px 12px rgb(61 47 48 / 0.6);
 		}
 
 		.fields {
