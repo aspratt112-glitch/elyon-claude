@@ -91,6 +91,12 @@ export default config({
 				statement: fields.object(
 					{
 						text: fields.text({ label: 'Statement' }),
+						video: fields.file({
+							label: 'Background video',
+							description: 'Short, silent MP4. It loops, so the last frame should match the first.',
+							directory: 'public/videos/home',
+							publicPath: '/videos/home/',
+						}),
 						image: image('Background image', 'home'),
 					},
 					{ label: 'Statement band' },

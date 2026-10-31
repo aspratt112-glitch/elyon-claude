@@ -32,7 +32,8 @@ pillars:
       meaningful difference rather than just appear on the label.
 statement:
   text: We like empty bottles. Not empty promises.
-  image: /images/home/lather.jpg
+  video: /videos/home/statement-liquid.mp4
+  image: /images/home/statement-poster.jpg
 story:
   eyebrow: Our story
   heading: Built by people who spent years telling men the truth.

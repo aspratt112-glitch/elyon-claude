@@ -53,7 +53,21 @@ const products = await getProducts();
 	</section>
 
 	<section class="statement on-dark">
-		{home.statement.image && <img src={home.statement.image} alt="" loading="lazy" />}
+		{home.statement.video ? (
+			<video
+				class="statement-bg"
+				src={home.statement.video}
+				poster={home.statement.image ?? undefined}
+				autoplay
+				muted
+				loop
+				playsinline
+				preload="metadata"
+				aria-hidden="true"
+			/>
+		) : (
+			home.statement.image && <img class="statement-bg statement-bg--still" src={home.statement.image} alt="" loading="lazy" />
+		)}
 		<div class="wrap statement-inner">
 			<Monogram class="statement-mark" />
 			<p class="h2">{home.statement.text}</p>
@@ -76,6 +90,15 @@ const products = await getProducts();
 
 	{home.popup.enabled && <SignupPopup {...home.popup} />}
 </Layout>
+
+<script>
+	// Respect reduced-motion settings: hold the band on its first frame instead of looping.
+	const video = document.querySelector<HTMLVideoElement>('video.statement-bg');
+	if (video && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		video.removeAttribute('autoplay');
+		video.pause();
+	}
+</script>
 
 <style>
 	/* Full-bleed banner that runs up behind the transparent menu */
@@ -216,22 +239,42 @@ const products = await getProducts();
 		overflow: hidden;
 	}
 
-	/* The source image is low resolution, so it's softened into texture */
-	.statement img {
+	/* Background video (or still): its brightness is kept but the colour comes from the
+	   Espresso underneath, so the footage sits in the brand palette */
+	.statement-bg {
 		position: absolute;
-		inset: -12px;
-		width: calc(100% + 24px);
-		height: calc(100% + 24px);
+		inset: 0;
+		width: 100%;
+		height: 100%;
 		object-fit: cover;
-		opacity: 0.22;
-		filter: blur(3px) saturate(0.6);
-		/* Fade the texture in from plain Espresso so there's no seam with the section above */
+		opacity: 0.55;
+		mix-blend-mode: luminosity;
+		/* Fade in from plain Espresso so there's no seam with the section above */
 		-webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 45%);
 		mask-image: linear-gradient(to bottom, transparent 0%, #000 45%);
 	}
 
+	/* The fallback still is low resolution, so it's softened into texture */
+	.statement-bg--still {
+		inset: -12px;
+		width: calc(100% + 24px);
+		height: calc(100% + 24px);
+		opacity: 0.22;
+		filter: blur(3px) saturate(0.6);
+	}
+
+	/* A soft Espresso pool behind the words keeps them clear of the brightest highlights */
+	.statement::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(ellipse 45% 55% at 50% 50%, rgb(61 47 48 / 0.6), rgb(61 47 48 / 0));
+		pointer-events: none;
+	}
+
 	.statement-inner {
 		position: relative;
+		z-index: 1;
 		display: grid;
 		place-content: center;
 		justify-items: center;
