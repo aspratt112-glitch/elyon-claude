@@ -8,9 +8,11 @@ interface Props {
 	description?: string | null;
 	/** Lay the menu transparently over the page's opening banner. */
 	overlayHeader?: boolean;
+	/** Leave out the menu and footer (the pre-launch landing page links nowhere). */
+	bare?: boolean;
 }
 
-const { title, description, overlayHeader = false } = Astro.props;
+const { title, description, overlayHeader = false, bare = false } = Astro.props;
 const pageTitle = title || "Elyon | Premium Men's Haircare";
 const pageDescription =
 	description || 'Scientifically formulated haircare for men. Three products. One system. No guesswork.';
@@ -31,12 +33,12 @@ const pageDescription =
 		<script is:inline>document.documentElement.classList.add('js');</script>
 	</head>
 	<body>
-		<a class="skip label" href="#main">Skip to content</a>
-		<Header overlay={overlayHeader} />
+		{!bare && <a class="skip label" href="#main">Skip to content</a>}
+		{!bare && <Header overlay={overlayHeader} />}
 		<main id="main">
 			<slot />
 		</main>
-		<Footer />
+		{!bare && <Footer />}
 	</body>
 </html>
 

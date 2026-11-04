@@ -59,6 +59,11 @@ body {
 	text-rendering: optimizeLegibility;
 }
 
+/* Keeps `hidden` working on elements styled as flex or grid (the sign-up forms swap states with it) */
+[hidden] {
+	display: none !important;
+}
+
 img {
 	display: block;
 	max-width: 100%;

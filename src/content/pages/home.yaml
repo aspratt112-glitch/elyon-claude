@@ -4,13 +4,12 @@ seo:
     A three-step haircare system for men. Scientifically formulated, honestly
     explained and designed to sit front and centre in your shower.
 hero:
-  eyebrow: ''
   heading: No guesswork. Just science.
   text: >-
     Transforming haircare from a task into a ritual, and confidence from a
     destination into a daily practice.
   ctaLabel: Explore the system
-  image: /images/home/bottle-detail.jpg
+  image: /images/home/hero/image.jpg
 system:
   eyebrow: The system
   heading: Three products. One complete system.
@@ -32,16 +31,16 @@ pillars:
       meaningful difference rather than just appear on the label.
 statement:
   text: We like empty bottles. Not empty promises.
-  video: /videos/home/statement-liquid.mp4
-  image: /images/home/statement-poster.jpg
+  video: /videos/home/statement/video.mp4
+  image: /images/home/statement/image.jpg
 story:
   eyebrow: Our story
   heading: Built by people who spent years telling men the truth.
   text: >-
     After years in the hair loss industry, we saw men offered either
-    overpromises or overcomplicated routines. Elyon is the honest alternative:
-    a system that supports your hair, and the treatments you choose, every day.
-  image: /images/home/ritual-card.jpg
+    overpromises or overcomplicated routines. Elyon is the honest alternative: a
+    system that supports your hair, and the treatments you choose, every day.
+  image: /images/home/story/image.jpg
 popup:
   enabled: true
   eyebrow: Join the community
@@ -50,4 +49,4 @@ popup:
     Three products. One system. Sign up to hear when Elyon launches, and get
     early access before anyone else.
   buttonLabel: Join the list
-  image: /images/home/popup-kit.jpg
+  image: /images/home/popup/image.png

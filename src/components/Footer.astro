@@ -37,7 +37,13 @@ const year = new Date().getFullYear();
 			</ul>
 		</div>
 
-		<form class="col newsletter" id="newsletter" data-email={settings.email}>
+		<form
+			class="col newsletter"
+			id="newsletter"
+			data-klaviyo-key={settings.klaviyo.publicKey}
+			data-klaviyo-list={settings.klaviyo.listId}
+			data-source="Footer"
+		>
 			<p class="label heading">{settings.newsletterHeading}</p>
 			<p class="mono">{settings.newsletterText}</p>
 			<div class="signup">
@@ -45,6 +51,7 @@ const year = new Date().getFullYear();
 				<input id="newsletter-email" name="email" type="email" placeholder="Email address" required autocomplete="email" />
 				<button class="label" type="submit">Join</button>
 			</div>
+			<p class="label status" role="status" hidden></p>
 		</form>
 	</div>
 
@@ -59,15 +66,24 @@ const year = new Date().getFullYear();
 </footer>
 
 <script>
-	// No mailing list provider is connected yet, so sign-ups open a pre-filled email.
+	import { handleSignup } from '../lib/subscribe';
+
 	const form = document.querySelector<HTMLFormElement>('#newsletter');
-	form?.addEventListener('submit', (event) => {
-		event.preventDefault();
-		const email = new FormData(form).get('email');
-		const subject = encodeURIComponent('Join the Elyon community');
-		const body = encodeURIComponent(`Please add ${email} to the Elyon launch list.`);
-		window.location.href = `mailto:${form.dataset.email}?subject=${subject}&body=${body}`;
-	});
+	const status = form?.querySelector<HTMLElement>('.status');
+
+	if (form && status) {
+		handleSignup(form, {
+			onSuccess: () => {
+				form.querySelector<HTMLElement>('.signup')!.hidden = true;
+				status.textContent = "Thank you. You're on the list.";
+				status.hidden = false;
+			},
+			onError: () => {
+				status.textContent = 'Something went wrong. Please try again.';
+				status.hidden = false;
+			},
+		});
+	}
 </script>
 
 <style>
@@ -138,6 +154,10 @@ const year = new Date().getFullYear();
 		color: inherit;
 		cursor: pointer;
 		padding-inline: 1rem 0;
+	}
+
+	.status {
+		margin-top: 1rem;
 	}
 
 	.marks {

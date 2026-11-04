@@ -40,7 +40,7 @@ export default config({
 	ui: {
 		brand: { name: 'Elyon' },
 		navigation: {
-			Pages: ['home', 'story', 'mission', 'faq', 'contact'],
+			Pages: ['landing', 'home', 'story', 'mission', 'faq', 'contact'],
 			Products: ['products'],
 			Site: ['settings'],
 		},
@@ -50,6 +50,12 @@ export default config({
 			label: 'Site settings',
 			path: 'src/content/settings',
 			schema: {
+				launched: fields.checkbox({
+					label: 'Site is live',
+					description:
+						'Leave unticked until launch: the published site shows only the sign-up landing page. Tick it to publish the full website.',
+					defaultValue: false,
+				}),
 				announcements: fields.array(fields.text({ label: 'Message' }), {
 					label: 'Announcement bar',
 					description:
@@ -57,11 +63,31 @@ export default config({
 					itemLabel: (props) => props.value,
 				}),
 				email: fields.text({ label: 'Contact email' }),
+				klaviyo: fields.object(
+					{
+						publicKey: fields.text({ label: 'Public API key (Site ID)', description: 'Settings → API keys in Klaviyo. Never a private key (pk_…).' }),
+						listId: fields.text({ label: 'List ID', description: 'The list every sign-up form adds people to.' }),
+					},
+					{ label: 'Klaviyo (sign-ups)' },
+				),
 				instagram: fields.url({ label: 'Instagram URL' }),
 				facebook: fields.url({ label: 'Facebook URL' }),
 				newsletterHeading: fields.text({ label: 'Newsletter heading' }),
 				newsletterText: fields.text({ label: 'Newsletter text', multiline: true }),
 				footerTagline: fields.text({ label: 'Footer tagline' }),
+			},
+		}),
+		landing: singleton({
+			label: 'Landing page (pre-launch)',
+			path: 'src/content/pages/landing',
+			schema: {
+				seo: seo(),
+				eyebrow: fields.text({ label: 'Label' }),
+				heading: fields.text({ label: 'Heading' }),
+				text: fields.text({ label: 'Text', multiline: true }),
+				buttonLabel: fields.text({ label: 'Button label' }),
+				note: fields.text({ label: 'Small print under the form' }),
+				image: image('Image', 'landing'),
 			},
 		}),
 		home: singleton({

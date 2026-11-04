@@ -14,7 +14,7 @@ const { eyebrow, heading, text, buttonLabel, image } = Astro.props;
 const settings = await getSettings();
 ---
 
-<dialog class="signup-popup bg-espresso on-dark" aria-labelledby="signup-popup-heading" data-email={settings.email}>
+<dialog class="signup-popup bg-espresso on-dark" aria-labelledby="signup-popup-heading">
 	<div class="shell" class:list={{ 'has-image': image }}>
 		{image && (
 			<div class="media">
@@ -22,7 +22,12 @@ const settings = await getSettings();
 			</div>
 		)}
 
-		<form class="body" method="dialog">
+		<form
+			class="body"
+			data-klaviyo-key={settings.klaviyo.publicKey}
+			data-klaviyo-list={settings.klaviyo.listId}
+			data-source="Home page popup"
+		>
 			<button class="close label" type="button" data-close aria-label="Close">Close ✕</button>
 
 			<div class="stack">
@@ -32,7 +37,7 @@ const settings = await getSettings();
 				{text && <p class="mono">{text}</p>}
 			</div>
 
-			<div class="fields">
+			<div class="fields" data-signup-step>
 				<div class="field">
 					<label class="label muted" for="popup-first-name">First name</label>
 					<input id="popup-first-name" name="firstName" type="text" required autocomplete="given-name" />
@@ -47,13 +52,19 @@ const settings = await getSettings();
 				</div>
 			</div>
 
-			<button class="btn btn--light submit" type="submit">{buttonLabel || 'Join'}</button>
-			<button class="later label" type="button" data-close>No thanks</button>
+			<button class="btn btn--light submit" type="submit" data-signup-step>{buttonLabel || 'Join'}</button>
+			<p class="label error" role="alert" hidden>
+				Something went wrong. Please try again{settings.email && `, or email us at ${settings.email}`}.
+			</p>
+			<button class="later label" type="button" data-close data-signup-step>No thanks</button>
+			<p class="thanks h3" role="status" hidden>Thank you. You're on the list.</p>
 		</form>
 	</div>
 </dialog>
 
 <script>
+	import { handleSignup } from '../lib/subscribe';
+
 	// Opens shortly after every load of the home page.
 	const dialog = document.querySelector<HTMLDialogElement>('.signup-popup');
 	const form = dialog?.querySelector('form');
@@ -69,15 +80,19 @@ const settings = await getSettings();
 			if (event.target === dialog) close();
 		});
 
-		// No mailing list provider is connected yet, so sign-ups open a pre-filled email.
-		form.addEventListener('submit', (event) => {
-			event.preventDefault();
-			const data = new FormData(form);
-			const name = `${data.get('firstName')} ${data.get('lastName')}`.trim();
-			const subject = encodeURIComponent('Join the Elyon community');
-			const body = encodeURIComponent(`Please add ${name} (${data.get('email')}) to the Elyon launch list.`);
-			dialog.close();
-			window.location.href = `mailto:${dialog.dataset.email}?subject=${subject}&body=${body}`;
+		const error = form.querySelector<HTMLElement>('.error');
+		const thanks = form.querySelector<HTMLElement>('.thanks');
+
+		handleSignup(form, {
+			// Swap the form for a thank-you, then close on its own
+			onSuccess: () => {
+				form.querySelectorAll<HTMLElement>('[data-signup-step], .error').forEach((el) => (el.hidden = true));
+				if (thanks) thanks.hidden = false;
+				setTimeout(close, 2500);
+			},
+			onError: () => {
+				if (error) error.hidden = false;
+			},
 		});
 	}
 </script>
@@ -182,6 +197,15 @@ const settings = await getSettings();
 	.submit {
 		width: 100%;
 		min-height: 3rem;
+	}
+
+	.error {
+		text-align: center;
+	}
+
+	.thanks {
+		padding-block: var(--space-2) var(--space-3);
+		border-top: 1px solid var(--rule);
 	}
 
 	.later {

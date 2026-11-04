@@ -1,7 +1,11 @@
+launched: false
 announcements:
   - Three products. One system.
   - Made in Australia
 email: info@elyonlabs.com.au
+klaviyo:
+  publicKey: WBZCff
+  listId: SqR4AX
 instagram: https://www.instagram.com/elyon.labs
 facebook: https://www.facebook.com/
 newsletterHeading: Join the community
