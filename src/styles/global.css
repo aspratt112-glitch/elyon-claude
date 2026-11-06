@@ -1,5 +1,44 @@
 @import '@fontsource/martian-mono/300.css';
 @import '@fontsource/martian-mono/400.css';
+@import 'tailwindcss';
+
+/* Brand tokens as Tailwind utilities (bg-espresso, text-mineral, border-olive, font-mono…).
+   They point at the :root tokens below, so each colour is defined once. Tailwind's own
+   styles sit in cascade layers, so the site's existing CSS always wins over them. */
+@theme inline {
+	--color-espresso: var(--espresso);
+	--color-moss: var(--moss);
+	--color-olive: var(--olive);
+	--color-mineral: var(--mineral);
+	--color-stone: var(--stone);
+	--color-olive-30: var(--olive-30);
+	--color-ink: var(--ink);
+	--color-ink-muted: var(--ink-muted);
+	--color-paper: var(--paper);
+	--color-rule: var(--rule);
+	--color-rule-strong: var(--rule-strong);
+}
+
+@theme {
+	--font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	--font-mono: 'Martian Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+	--tracking-brand: 0.01em;
+}
+
+/* Tailwind's reset changes two browser defaults the site was built on; these put them back.
+   In the base layer, so Tailwind classes on an element (e.g. `block` on an svg) still win. */
+@layer base {
+	/* The logos sit inline, so the header and footer keep their original heights */
+	svg {
+		display: inline;
+		vertical-align: baseline;
+	}
+
+	/* Keeps the sign-up popup centred on screen */
+	dialog {
+		margin: auto;
+	}
+}
 
 /* Brand tokens from the Elyon Brand Guidelines 2026 */
 :root {
@@ -17,8 +56,7 @@
 	--rule: rgb(61 47 48 / 0.14);
 	--rule-strong: rgb(61 47 48 / 0.32);
 
-	--font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	--font-mono: 'Martian Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+	/* --font-sans and --font-mono are defined in @theme above */
 
 	/* Tracking stays within the guidelines' 0–10 range (0–0.01em) */
 	--track: 0.01em;
