@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<!--
+  Elyon welcome email: sent by a Klaviyo flow when someone joins the sign-up list.
+
+  The logos are served from the website (public/email/ in this project), so they load
+  in any inbox once the site is deployed. Don't rename or delete those files: emails
+  already sent still point at them.
+
+  To use it in Klaviyo, paste this whole file into a new template: Content → Templates →
+  Create template → Import or code your own (the HTML editor).
+
+  Suggested subject:      You're on the list
+  Suggested preview text: Thanks for joining. Here's what happens next.
+
+  Klaviyo fills in the {{ … }} and {% … %} tags when it sends: the person's first name,
+  the unsubscribe link, and your business name and address from Klaviyo's account settings.
+-->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="x-apple-disable-message-reformatting">
+	<meta name="color-scheme" content="light">
+	<meta name="supported-color-schemes" content="light">
+	<title>You're on the list</title>
+	<!--[if mso]>
+	<noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+	<![endif]-->
+	<!-- Martian Mono shows in Apple Mail and iOS; other apps fall back to a system monospace -->
+	<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@300;400&display=swap" rel="stylesheet">
+	<style>
+		body { margin: 0; padding: 0; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+		table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+		img { border: 0; display: block; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+		a { color: #3d2f30; }
+		a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; }
+		@media screen and (max-width: 620px) {
+			.container { width: 100% !important; }
+			.pad { padding-left: 24px !important; padding-right: 24px !important; }
+			.heading { font-size: 30px !important; line-height: 36px !important; }
+		}
+	</style>
+</head>
+<body style="margin:0; padding:0; background-color:#d5d5ca;">
+
+	<!-- Preview text: shows next to the subject line in the inbox -->
+	<div style="display:none; max-height:0; overflow:hidden; mso-hide:all; font-size:1px; line-height:1px; color:#d5d5ca;">
+		Thanks for joining. Here's what happens next.&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;
+	</div>
+
+	<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#d5d5ca;">
+		<tr>
+			<td align="center" style="padding:32px 12px;">
+
+				<!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+				<table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px;">
+
+					<!-- Hero: wordmark, label and heading on espresso -->
+					<tr>
+						<td class="pad" align="left" bgcolor="#3d2f30" style="background-color:#3d2f30; padding:36px 48px 48px;">
+							<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+								<tr>
+									<td align="left" valign="middle">
+										<img src="https://elyonlabs.com.au/email/elyon-wordmark.png" width="120" height="22" alt="Elyon" style="display:block; width:120px; height:22px; color:#f3f1f3; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:20px;">
+									</td>
+									<td align="right" valign="middle" style="font-family:'Martian Mono', ui-monospace, Menlo, Consolas, monospace; font-size:10px; line-height:16px; font-weight:300; letter-spacing:0.01em; text-transform:uppercase; color:#d5d5ca;">
+										Coming soon
+									</td>
+								</tr>
+							</table>
+							<p style="margin:56px 0 16px; font-family:'Martian Mono', ui-monospace, Menlo, Consolas, monospace; font-size:11px; line-height:16px; font-weight:300; letter-spacing:0.01em; text-transform:uppercase; color:#d5d5ca;">
+								[ Welcome ]
+							</p>
+							<h1 class="heading" style="margin:0; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:40px; line-height:46px; font-weight:400; letter-spacing:0.01em; color:#f3f1f3;">
+								You're on the list.
+							</h1>
+						</td>
+					</tr>
+
+					<!-- Olive accent stripe -->
+					<tr>
+						<td bgcolor="#73744e" height="6" style="background-color:#73744e; height:6px; font-size:0; line-height:0;">&nbsp;</td>
+					</tr>
+
+					<!-- Body -->
+					<tr>
+						<td class="pad" bgcolor="#f3f1f3" style="background-color:#f3f1f3; padding:44px 48px 16px;">
+							<p style="margin:0 0 18px; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:16px; line-height:26px; color:#3d2f30;">
+								Hi {{ first_name|default:'there' }},
+							</p>
+							<p style="margin:0 0 18px; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:16px; line-height:26px; color:#3d2f30;">
+								Thank you for signing up. Elyon is premium men's haircare: three products that work as one system, scientifically formulated to promote hair health and growth, and made in Australia.
+							</p>
+							<p style="margin:0 0 32px; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:16px; line-height:26px; color:#3d2f30;">
+								We're putting the finishing touches on the launch. Because you're one of the first on the list, here's what to expect from us.
+							</p>
+						</td>
+					</tr>
+
+					<!-- What happens next: three numbered rows -->
+					<tr>
+						<td class="pad" bgcolor="#f3f1f3" style="background-color:#f3f1f3; padding:0 48px 40px;">
+							<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+								<tr>
+									<td width="56" valign="top" style="padding:22px 0; border-top:1px solid #d5d5ca; ">
+										<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#73744e" width="32" height="32" align="center" valign="middle" style="background-color:#73744e; width:32px; height:32px; font-family:'Martian Mono', ui-monospace, Menlo, Consolas, monospace; font-size:11px; line-height:32px; color:#f3f1f3;">01</td></tr></table>
+									</td>
+									<td valign="top" style="padding:22px 0; border-top:1px solid #d5d5ca; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:15px; line-height:22px; color:#3d2f30;">
+										<strong style="font-weight:600;">Launch news</strong><br>
+										<span style="color:#6a6061;">You'll hear from us the moment Elyon is ready.</span>
+									</td>
+								</tr>
+								<tr>
+									<td width="56" valign="top" style="padding:22px 0; border-top:1px solid #d5d5ca; ">
+										<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#73744e" width="32" height="32" align="center" valign="middle" style="background-color:#73744e; width:32px; height:32px; font-family:'Martian Mono', ui-monospace, Menlo, Consolas, monospace; font-size:11px; line-height:32px; color:#f3f1f3;">02</td></tr></table>
+									</td>
+									<td valign="top" style="padding:22px 0; border-top:1px solid #d5d5ca; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:15px; line-height:22px; color:#3d2f30;">
+										<strong style="font-weight:600;">Early access</strong><br>
+										<span style="color:#6a6061;">The chance to order the system before anyone else.</span>
+									</td>
+								</tr>
+								<tr>
+									<td width="56" valign="top" style="padding:22px 0; border-top:1px solid #d5d5ca; border-bottom:1px solid #d5d5ca; ">
+										<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#73744e" width="32" height="32" align="center" valign="middle" style="background-color:#73744e; width:32px; height:32px; font-family:'Martian Mono', ui-monospace, Menlo, Consolas, monospace; font-size:11px; line-height:32px; color:#f3f1f3;">03</td></tr></table>
+									</td>
+									<td valign="top" style="padding:22px 0; border-top:1px solid #d5d5ca; border-bottom:1px solid #d5d5ca; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:15px; line-height:22px; color:#3d2f30;">
+										<strong style="font-weight:600;">Nothing else</strong><br>
+										<span style="color:#6a6061;">No spam. Just launch news and early access.</span>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+
+					<!-- Statement band: the blurred product photo from the coming soon page under a moss wash.
+					     The blur and wash are baked into the image, since email apps ignore CSS filters.
+					     Apps that skip background images show plain moss instead. -->
+					<tr>
+						<td class="pad" align="center" valign="middle" height="160" bgcolor="#3c3e31" background="https://elyonlabs.com.au/email/statement-bg.jpg" style="background-color:#3c3e31; background-image:url('https://elyonlabs.com.au/email/statement-bg.jpg'); background-size:cover; background-position:center; background-repeat:no-repeat; height:160px; padding:0 48px;">
+							<!--[if gte mso 9]>
+							<v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:600px; height:160px;">
+							<v:fill type="frame" src="https://elyonlabs.com.au/email/statement-bg.jpg" color="#3c3e31" />
+							<v:textbox inset="0,0,0,0" style="v-text-anchor:middle;">
+							<div style="text-align:center;">
+							<![endif]-->
+							<p style="margin:0 0 10px; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:24px; line-height:32px; font-weight:400; letter-spacing:0.01em; color:#f3f1f3;">
+								Three products. One system.
+							</p>
+							<p style="margin:0; font-family:'Martian Mono', ui-monospace, Menlo, Consolas, monospace; font-size:11px; line-height:16px; font-weight:300; letter-spacing:0.01em; text-transform:uppercase; color:#d5d5ca;">
+								No guesswork &middot; Just science &middot; Made in Australia
+							</p>
+							<!--[if gte mso 9]>
+							</div>
+							</v:textbox>
+							</v:rect>
+							<![endif]-->
+						</td>
+					</tr>
+
+					<!-- Call to action: follow on Instagram -->
+					<tr>
+						<td class="pad" bgcolor="#eae1db" style="background-color:#eae1db; padding:44px 48px 36px;">
+							<p style="margin:0 0 20px; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:16px; line-height:26px; color:#3d2f30;">
+								Until then, follow along for a closer look at what we're building.
+							</p>
+							<table role="presentation" cellpadding="0" cellspacing="0" border="0">
+								<tr>
+									<td bgcolor="#3d2f30" style="background-color:#3d2f30;">
+										<a href="https://www.instagram.com/elyon.labs" target="_blank" style="display:inline-block; padding:16px 28px; font-family:'Martian Mono', ui-monospace, Menlo, Consolas, monospace; font-size:12px; line-height:16px; font-weight:400; letter-spacing:0.01em; text-transform:uppercase; text-decoration:none; color:#f3f1f3;">Follow @elyon.labs</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+
+					<!-- Sign-off -->
+					<tr>
+						<td class="pad" bgcolor="#eae1db" style="background-color:#eae1db; padding:0 48px 48px;">
+							<p style="margin:0 0 18px; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:16px; line-height:26px; color:#3d2f30;">
+								Talk soon,<br>
+								The Elyon team
+							</p>
+							<p style="margin:0; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:14px; line-height:22px; color:#6a6061;">
+								Questions? Just reply to this email or write to <a href="mailto:info@elyonlabs.com.au" style="color:#3d2f30; text-decoration:underline; text-decoration-color:#73744e;">info@elyonlabs.com.au</a>.
+							</p>
+						</td>
+					</tr>
+
+					<!-- Olive rule above the footer -->
+					<tr>
+						<td bgcolor="#73744e" height="3" style="background-color:#73744e; height:3px; font-size:0; line-height:0;">&nbsp;</td>
+					</tr>
+
+					<!-- Footer -->
+					<tr>
+						<td class="pad" align="center" bgcolor="#3d2f30" style="background-color:#3d2f30; padding:40px 48px;">
+							<table role="presentation" align="center" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 24px;">
+								<tr>
+									<td align="center">
+										<img src="https://elyonlabs.com.au/email/elyon-monogram.png" width="48" height="48" alt="Elyon" style="display:block; width:48px; height:48px; color:#f3f1f3; font-family:'Martian Mono', ui-monospace, Menlo, Consolas, monospace; font-size:11px;">
+									</td>
+								</tr>
+							</table>
+							<p style="margin:0 0 16px; font-family:'Martian Mono', ui-monospace, Menlo, Consolas, monospace; font-size:11px; line-height:18px; font-weight:300; letter-spacing:0.01em; text-transform:uppercase; color:#d5d5ca;">
+								Premium men's haircare. Made in Australia.
+							</p>
+							<p style="margin:0 0 16px; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:12px; line-height:20px; color:#d5d5ca;">
+								<a href="https://www.instagram.com/elyon.labs" target="_blank" style="color:#f3f1f3; text-decoration:underline;">Instagram</a>
+								&nbsp;&middot;&nbsp;
+								<a href="mailto:info@elyonlabs.com.au" style="color:#f3f1f3; text-decoration:underline;">info@elyonlabs.com.au</a>
+							</p>
+							<p style="margin:0; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:11px; line-height:18px; color:#d5d5ca;">
+								You're receiving this because you signed up at Elyon.<br>
+								{{ organization.name }} &middot; {{ organization.full_address }}<br>
+								<a href="{% unsubscribe_url %}" style="color:#f3f1f3; text-decoration:underline;">Unsubscribe</a>
+							</p>
+						</td>
+					</tr>
+
+				</table>
+				<!--[if mso]></td></tr></table><![endif]-->
+
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
