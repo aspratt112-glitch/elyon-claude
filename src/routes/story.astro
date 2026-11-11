@@ -7,145 +7,60 @@ const story = await reader.singletons.story.readOrThrow();
 
 <Layout title={story.seo.title} description={story.seo.description}>
 	<header class="wrap page-head">
-		<p class="label bracket muted">{story.eyebrow}</p>
-		<h1 class="display">{story.heading}</h1>
-		<p class="lede muted">{story.intro}</p>
+		<p class="label bracket text-ink-muted">{story.eyebrow}</p>
+		<h1 class="text-display">{story.heading}</h1>
+		<p class="lede text-ink-muted">{story.intro}</p>
 	</header>
 
 	{story.image && (
 		<div class="wrap">
-			<div class="frame ratio-wide">
+			<div class="frame aspect-16/7">
 				<img src={story.image} alt="" width="2400" height="1050" fetchpriority="high" />
 			</div>
 		</div>
 	)}
 
-	<section class="section">
-		<div class="wrap body">
-			<p class="label bracket muted side">Origin</p>
-			<div class="prose">
-				{paragraphs(story.body).map((p) => <p>{p}</p>)}
+	<section class="py-section">
+		<div class="wrap grid grid-cols-[4fr_8fr] gap-10 max-desk:grid-cols-1">
+			<p class="label bracket sticky top-28 self-start text-ink-muted max-desk:static">Origin</p>
+			<div class="prose text-[length:clamp(1.0625rem,1.3vw,1.1875rem)] leading-[1.7]">
+				{paragraphs(story.body).map((p) => <p class="first:text-[1.3em] first:leading-[1.45]">{p}</p>)}
 			</div>
 		</div>
 	</section>
 
-	<section class="quote bg-moss on-dark">
-		<div class="wrap quote-inner">
-			<div class="stack quote-copy">
-				<p class="label bracket muted">Our belief</p>
-				<blockquote class="display">{story.pullQuote}</blockquote>
+	<section class="bg-moss on-dark">
+		<div class="wrap grid grid-cols-[7fr_5fr] items-center gap-space-6 py-section max-desk:grid-cols-1 max-desk:gap-space-5">
+			<div class="stack">
+				<p class="label bracket text-ink-muted">Our belief</p>
+				<blockquote class="text-display max-w-[12ch]">{story.pullQuote}</blockquote>
 			</div>
 			{story.secondImage && (
-				<div class="frame ratio-portrait">
+				<div class="frame aspect-4/5">
 					<img src={story.secondImage} alt="" loading="lazy" width="875" height="1094" />
 				</div>
 			)}
 		</div>
 	</section>
 
-	<section class="section">
+	<section class="py-section">
 		<div class="wrap">
-			<div class="stack traits-head">
-				<p class="label bracket muted">Who we are</p>
-				<h2 class="h2">Masculine, not macho. Premium, not pretentious.</h2>
+			<div class="stack mb-space-5">
+				<p class="label bracket text-ink-muted">Who we are</p>
+				<h2 class="text-h2 max-w-[22ch]">Masculine, not macho. Premium, not pretentious.</h2>
 			</div>
-			<ol class="traits">
+			<ol>
 				{story.personality.map((trait, i) => (
-					<li>
-						<span class="label bracket muted">{stepNumber(i + 1)}</span>
-						<h3 class="h3">{trait.title}</h3>
-						<p class="mono">{trait.text}</p>
+					<li
+						class="grid grid-cols-[2fr_5fr_5fr] items-baseline gap-6 border-t border-rule py-10 last:border-b
+							max-desk:grid-cols-1 max-desk:gap-2"
+					>
+						<span class="label bracket text-ink-muted">{stepNumber(i + 1)}</span>
+						<h3 class="text-h3">{trait.title}</h3>
+						<p class="mono max-w-[52ch]">{trait.text}</p>
 					</li>
 				))}
 			</ol>
 		</div>
 	</section>
 </Layout>
-
-<style>
-	.body {
-		display: grid;
-		grid-template-columns: 4fr 8fr;
-		gap: var(--space-4);
-	}
-
-	.side {
-		position: sticky;
-		top: 7rem;
-		align-self: start;
-	}
-
-	.body .prose {
-		font-size: clamp(1.0625rem, 1.3vw, 1.1875rem);
-		line-height: 1.7;
-	}
-
-	.body .prose p:first-child {
-		font-size: 1.3em;
-		line-height: 1.45;
-	}
-
-	.quote-inner {
-		display: grid;
-		grid-template-columns: 7fr 5fr;
-		gap: var(--space-6);
-		align-items: center;
-		padding-block: var(--section);
-	}
-
-	blockquote {
-		margin: 0;
-		max-width: 12ch;
-	}
-
-	.traits-head {
-		margin-bottom: var(--space-5);
-	}
-
-	.traits-head h2 {
-		max-width: 22ch;
-	}
-
-	.traits {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
-
-	.traits li {
-		display: grid;
-		grid-template-columns: 2fr 5fr 5fr;
-		gap: var(--space-3);
-		align-items: baseline;
-		padding-block: var(--space-4);
-		border-top: 1px solid var(--rule);
-	}
-
-	.traits li:last-child {
-		border-bottom: 1px solid var(--rule);
-	}
-
-	.traits .mono {
-		max-width: 52ch;
-	}
-
-	@media (max-width: 960px) {
-		.body,
-		.quote-inner {
-			grid-template-columns: 1fr;
-		}
-
-		.quote-inner {
-			gap: var(--space-5);
-		}
-
-		.side {
-			position: static;
-		}
-
-		.traits li {
-			grid-template-columns: 1fr;
-			gap: var(--space-1);
-		}
-	}
-</style>

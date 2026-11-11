@@ -7,148 +7,53 @@ const mission = await reader.singletons.mission.readOrThrow();
 ---
 
 <Layout title={mission.seo.title} description={mission.seo.description}>
-	<section class="hero bg-espresso on-dark">
-		<div class="wrap hero-inner">
+	<section class="bg-espresso on-dark">
+		<div class="wrap grid grid-cols-2 items-end gap-space-5 py-space-6 max-nav:grid-cols-1">
 			<div class="stack">
-				<p class="label bracket muted">{mission.eyebrow}</p>
-				<h1 class="display">{mission.heading}</h1>
+				<p class="label bracket text-ink-muted">{mission.eyebrow}</p>
+				<h1 class="text-display">{mission.heading}</h1>
 			</div>
-			<p class="statement">{mission.mission}</p>
+			<p class="max-w-[34ch] text-[length:clamp(1.15rem,1.9vw,1.6rem)] leading-[1.4] text-ink-muted">{mission.mission}</p>
 		</div>
 	</section>
 
-	<section class="section">
-		<div class="wrap vision">
-			<div class="frame ratio-portrait">
+	<section class="py-section">
+		<div class="wrap grid grid-cols-[5fr_7fr] items-center gap-space-6 max-nav:grid-cols-1 max-nav:gap-10">
+			<div class="frame aspect-4/5">
 				{mission.image && <img src={mission.image} alt="" loading="lazy" width="1203" height="1523" />}
 			</div>
-			<div class="stack vision-copy">
-				<p class="label bracket muted">Vision</p>
-				<p class="vision-text">{mission.vision}</p>
+			<div class="stack gap-10">
+				<p class="label bracket text-ink-muted">Vision</p>
+				<p class="max-w-[32ch] text-[length:clamp(1.25rem,2.2vw,1.85rem)] leading-[1.4]">{mission.vision}</p>
 			</div>
 		</div>
 	</section>
 
-	<section class="section rule-top">
+	<section class="border-t border-rule py-section">
 		<div class="wrap">
-			<div class="stack values-head">
-				<p class="label bracket muted">Values</p>
-				<h2 class="h2">{mission.valuesHeading}</h2>
+			<div class="stack mb-space-5">
+				<p class="label bracket text-ink-muted">Values</p>
+				<h2 class="text-h2">{mission.valuesHeading}</h2>
 			</div>
-			<ol class="values">
+			<ol>
 				{mission.values.map((value, i) => (
-					<li>
-						<span class="label bracket muted">{stepNumber(i + 1)}</span>
-						<h3 class="h3">{value.title}</h3>
-						<p class="mono">{value.text}</p>
+					<li
+						class="grid grid-cols-[2fr_5fr_5fr] items-baseline gap-6 border-t border-rule py-10 last:border-b
+							max-nav:grid-cols-1 max-nav:gap-2"
+					>
+						<span class="label bracket text-ink-muted">{stepNumber(i + 1)}</span>
+						<h3 class="text-[length:clamp(1.3rem,2.2vw,1.85rem)] leading-[1.25]">{value.title}</h3>
+						<p class="mono max-w-[52ch]">{value.text}</p>
 					</li>
 				))}
 			</ol>
 		</div>
 	</section>
 
-	<section class="promise">
-		<div class="wrap promise-inner">
-			<Monogram class="mark" />
-			<p class="h2">{mission.promise}</p>
+	<section>
+		<div class="wrap grid justify-items-center gap-10 pb-section text-center">
+			<Monogram class="h-auto w-10" />
+			<p class="text-h2 max-w-[26ch]">{mission.promise}</p>
 		</div>
 	</section>
 </Layout>
-
-<style>
-	.hero-inner {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: var(--space-5);
-		align-items: end;
-		padding-block: var(--space-6);
-	}
-
-	.statement {
-		max-width: 34ch;
-		font-size: clamp(1.15rem, 1.9vw, 1.6rem);
-		line-height: 1.4;
-		color: var(--ink-muted);
-	}
-
-	.vision {
-		display: grid;
-		grid-template-columns: 5fr 7fr;
-		gap: var(--space-6);
-		align-items: center;
-	}
-
-	.vision-copy {
-		gap: var(--space-4);
-	}
-
-	.vision-text {
-		font-size: clamp(1.25rem, 2.2vw, 1.85rem);
-		line-height: 1.4;
-		max-width: 32ch;
-	}
-
-	.values-head {
-		margin-bottom: var(--space-5);
-	}
-
-	.values {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
-
-	.values li {
-		display: grid;
-		grid-template-columns: 2fr 5fr 5fr;
-		gap: var(--space-3);
-		align-items: baseline;
-		padding-block: var(--space-4);
-		border-top: 1px solid var(--rule);
-	}
-
-	.values li:last-child {
-		border-bottom: 1px solid var(--rule);
-	}
-
-	.values .h3 {
-		font-size: clamp(1.3rem, 2.2vw, 1.85rem);
-	}
-
-	.values .mono {
-		max-width: 52ch;
-	}
-
-	.promise-inner {
-		display: grid;
-		justify-items: center;
-		gap: var(--space-4);
-		padding-block: 0 var(--section);
-		text-align: center;
-	}
-
-	.promise-inner p {
-		max-width: 26ch;
-	}
-
-	:global(.mark) {
-		width: 2.5rem;
-		height: auto;
-	}
-
-	@media (max-width: 860px) {
-		.hero-inner,
-		.vision {
-			grid-template-columns: 1fr;
-		}
-
-		.vision {
-			gap: var(--space-4);
-		}
-
-		.values li {
-			grid-template-columns: 1fr;
-			gap: var(--space-1);
-		}
-	}
-</style>

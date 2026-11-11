@@ -2,9 +2,8 @@
 @import '@fontsource/martian-mono/400.css';
 @import 'tailwindcss';
 
-/* Brand tokens as Tailwind utilities (bg-espresso, text-mineral, border-olive, font-mono…).
-   They point at the :root tokens below, so each colour is defined once. Tailwind's own
-   styles sit in cascade layers, so the site's existing CSS always wins over them. */
+/* Brand tokens as Tailwind values. They point at the :root tokens below, so each value is
+   defined once and the .on-dark surface can still swap the ink colours underneath them. */
 @theme inline {
 	--color-espresso: var(--espresso);
 	--color-moss: var(--moss);
@@ -17,26 +16,43 @@
 	--color-paper: var(--paper);
 	--color-rule: var(--rule);
 	--color-rule-strong: var(--rule-strong);
+
+	/* The spacing scale keeps its names: gap-space-3, py-space-6, px-gutter, py-section… */
+	--spacing-space-1: var(--space-1);
+	--spacing-space-2: var(--space-2);
+	--spacing-space-3: var(--space-3);
+	--spacing-space-4: var(--space-4);
+	--spacing-space-5: var(--space-5);
+	--spacing-space-6: var(--space-6);
+	--spacing-gutter: var(--gutter);
+	--spacing-section: var(--section);
+	--spacing-header: var(--header-h);
+	--container-site: var(--max);
 }
 
 @theme {
 	--font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	--font-mono: 'Martian Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 	--tracking-brand: 0.01em;
-}
 
-/* Tailwind's reset changes two browser defaults the site was built on; these put them back.
-   In the base layer, so Tailwind classes on an element (e.g. `block` on an svg) still win. */
-@layer base {
-	/* The logos sit inline, so the header and footer keep their original heights */
-	svg {
-		display: inline;
-		vertical-align: baseline;
-	}
+	/* Type scale: fewer, more distinct steps (text-display, text-h2, text-h3) */
+	--text-display: clamp(2.4rem, 4.8vw, 4.5rem);
+	--text-h2: clamp(1.85rem, 3.4vw, 3rem);
+	--text-h3: clamp(1.125rem, 1.5vw, 1.3rem);
+	--text-h3--line-height: 1.25;
 
-	/* Keeps the sign-up popup centred on screen */
-	dialog {
-		margin: auto;
+	/* The site's two layout breakpoints: the menu collapses below `nav`, and pages go
+	   single-column below `desk` (use max-nav: and max-desk: for the smaller layouts) */
+	--breakpoint-nav: 861px;
+	--breakpoint-desk: 961px;
+
+	--animate-popup-in: popup-in 0.5s ease both;
+
+	@keyframes popup-in {
+		from {
+			opacity: 0;
+			transform: translateY(12px);
+		}
 	}
 }
 
@@ -56,8 +72,6 @@
 	--rule: rgb(61 47 48 / 0.14);
 	--rule-strong: rgb(61 47 48 / 0.32);
 
-	/* --font-sans and --font-mono are defined in @theme above */
-
 	/* Tracking stays within the guidelines' 0–10 range (0–0.01em) */
 	--track: 0.01em;
 
@@ -75,315 +89,253 @@
 	--section: clamp(5rem, 11vw, 10rem);
 }
 
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-}
-
-html {
-	-webkit-text-size-adjust: 100%;
-	scroll-behavior: smooth;
-}
-
-body {
-	margin: 0;
-	background: var(--paper);
-	color: var(--ink);
-	font-family: var(--font-sans);
-	font-size: 1.0625rem;
-	line-height: 1.6;
-	-webkit-font-smoothing: antialiased;
-	text-rendering: optimizeLegibility;
-}
-
-/* Keeps `hidden` working on elements styled as flex or grid (the sign-up forms swap states with it) */
-[hidden] {
-	display: none !important;
-}
-
-img {
-	display: block;
-	max-width: 100%;
-	height: auto;
-}
-
-a {
-	color: inherit;
-}
-
-/* Helvetica leading from 120% of font size, per the guidelines */
-h1,
-h2,
-h3,
-h4 {
-	margin: 0;
-	font-weight: 400;
-	line-height: 1.2;
-	letter-spacing: 0;
-	text-transform: uppercase;
-	text-wrap: balance;
-}
-
-p {
-	margin: 0;
-	text-wrap: pretty;
-}
-
-:focus-visible {
-	outline: 2px solid var(--olive);
-	outline-offset: 3px;
-}
-
-.wrap {
-	width: 100%;
-	max-width: var(--max);
-	margin-inline: auto;
-	padding-inline: var(--gutter);
-}
-
-.section {
-	padding-block: var(--section);
-}
-
-/* Type scale: fewer, more distinct steps */
-.display {
-	font-size: clamp(2.4rem, 4.8vw, 4.5rem);
-}
-
-.h2 {
-	font-size: clamp(1.85rem, 3.4vw, 3rem);
-}
-
-.h3 {
-	font-size: clamp(1.125rem, 1.5vw, 1.3rem);
-	line-height: 1.25;
-}
-
-.mono {
-	font-family: var(--font-mono);
-	font-weight: 300;
-	font-size: 0.8125rem;
-	line-height: 1.75;
-	color: var(--ink-muted);
-}
-
-.label {
-	font-family: var(--font-mono);
-	font-weight: 400;
-	font-size: 0.6875rem;
-	line-height: 1.4;
-	letter-spacing: var(--track);
-	text-transform: uppercase;
-}
-
-.muted {
-	color: var(--ink-muted);
-}
-
-/* [ Square brackets ]: the brand's signature typographic device */
-.bracket::before {
-	content: '[\00a0\00a0';
-}
-
-.bracket::after {
-	content: '\00a0\00a0]';
-}
-
-.lede {
-	font-family: var(--font-mono);
-	font-weight: 300;
-	font-size: clamp(0.875rem, 1.1vw, 0.9688rem);
-	line-height: 1.8;
-	max-width: 52ch;
-}
-
-.prose {
-	display: grid;
-	gap: 1.4em;
-	max-width: 66ch;
-}
-
-/* Eyebrow + heading + text stacks share one rhythm */
-.stack {
-	display: grid;
-	gap: var(--space-3);
-	justify-items: start;
-	align-content: start;
-}
-
-.stack > .label + * {
-	margin-top: calc(var(--space-1) * -0.5);
-}
-
-/* Buttons: square, solid, no softness */
-.btn {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: 0.75rem;
-	min-height: 3.5rem;
-	padding: 0 2.5rem;
-	border: 1px solid var(--espresso);
-	background: var(--espresso);
-	color: var(--mineral);
-	font-family: var(--font-mono);
-	font-size: 0.6875rem;
-	letter-spacing: var(--track);
-	text-transform: uppercase;
-	text-decoration: none;
-	cursor: pointer;
-	transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-.btn:hover {
-	background: transparent;
-	color: var(--espresso);
-}
-
-.btn--light {
-	background: var(--mineral);
-	color: var(--espresso);
-	border-color: var(--mineral);
-}
-
-.btn--light:hover {
-	background: transparent;
-	color: var(--mineral);
-}
-
-.link-arrow {
-	display: inline-flex;
-	gap: 0.75rem;
-	font-family: var(--font-mono);
-	font-size: 0.6875rem;
-	letter-spacing: var(--track);
-	text-transform: uppercase;
-	text-decoration: none;
-	border-bottom: 1px solid var(--rule-strong);
-	padding-bottom: 0.4rem;
-	transition: border-color 0.3s ease;
-}
-
-.link-arrow:hover {
-	border-bottom-color: currentColor;
-}
-
-.link-arrow::after {
-	content: '→';
-	transition: transform 0.3s ease;
-}
-
-.link-arrow:hover::after {
-	transform: translateX(4px);
-}
-
-/* Surfaces */
-.on-dark {
-	--ink: var(--mineral);
-	/* Mineral White at 70% on Espresso: 6.4:1; on Moss: 5.7:1 */
-	--ink-muted: #bcb7b9;
-	--rule: rgb(243 241 243 / 0.16);
-	--rule-strong: rgb(243 241 243 / 0.4);
-	color: var(--mineral);
-}
-
-.bg-espresso {
-	background: var(--espresso);
-}
-
-.bg-moss {
-	background: var(--moss);
-}
-
-.rule-top {
-	border-top: 1px solid var(--rule);
-}
-
-/* Imagery: one framing treatment, two ratios */
-.frame {
-	position: relative;
-	overflow: hidden;
-	background: var(--olive-30);
-}
-
-.frame img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-}
-
-.ratio-portrait {
-	aspect-ratio: 4 / 5;
-}
-
-.ratio-landscape {
-	aspect-ratio: 3 / 2;
-}
-
-.ratio-wide {
-	aspect-ratio: 16 / 7;
-}
-
-.visually-hidden {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	overflow: hidden;
-	clip: rect(0 0 0 0);
-	white-space: nowrap;
-}
-
-/* Page header used on inner pages */
-.page-head {
-	padding-block: var(--space-6) var(--space-5);
-	display: grid;
-	gap: var(--space-3);
-	justify-items: start;
-}
-
-/* Form fields */
-.field {
-	display: grid;
-	gap: var(--space-1);
-}
-
-.field input,
-.field select,
-.field textarea {
-	width: 100%;
-	padding: 0.9rem 0;
-	border: 0;
-	border-bottom: 1px solid var(--rule-strong);
-	border-radius: 0;
-	background: transparent;
-	color: inherit;
-	font: inherit;
-	font-size: 1rem;
-	appearance: none;
-	transition: border-color 0.3s ease;
-}
-
-.field textarea {
-	min-height: 8rem;
-	resize: vertical;
-}
-
-.field input:focus,
-.field select:focus,
-.field textarea:focus {
-	outline: none;
-	border-bottom-color: currentColor;
-}
-
-@media (prefers-reduced-motion: reduce) {
+@layer base {
 	html {
-		scroll-behavior: auto;
+		-webkit-text-size-adjust: 100%;
+		scroll-behavior: smooth;
 	}
 
-	*,
-	*::before,
-	*::after {
-		transition-duration: 0.01ms !important;
+	body {
+		background: var(--paper);
+		color: var(--ink);
+		font-family: var(--font-sans);
+		font-size: 1.0625rem;
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+		text-rendering: optimizeLegibility;
+	}
+
+	/* Tailwind makes svgs block-level; the logos were built to sit inline */
+	svg {
+		display: inline;
+		vertical-align: baseline;
+	}
+
+	/* Keeps the sign-up popup centred on screen */
+	dialog {
+		margin: auto;
+	}
+
+	/* Helvetica leading from 120% of font size, per the guidelines */
+	h1,
+	h2,
+	h3,
+	h4 {
+		font-weight: 400;
+		line-height: 1.2;
+		letter-spacing: 0;
+		text-transform: uppercase;
+		text-wrap: balance;
+	}
+
+	p {
+		text-wrap: pretty;
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--olive);
+		outline-offset: 3px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+
+		*,
+		*::before,
+		*::after {
+			transition-duration: 0.01ms !important;
+		}
+	}
+}
+
+/* Brand building blocks used across many pages. In the components layer, so Tailwind
+   classes on the same element override them. */
+@layer components {
+	.wrap {
+		width: 100%;
+		max-width: var(--max);
+		margin-inline: auto;
+		padding-inline: var(--gutter);
+	}
+
+	.mono {
+		font-family: var(--font-mono);
+		font-weight: 300;
+		font-size: 0.8125rem;
+		line-height: 1.75;
+		color: var(--ink-muted);
+	}
+
+	.label {
+		font-family: var(--font-mono);
+		font-weight: 400;
+		font-size: 0.6875rem;
+		line-height: 1.4;
+		letter-spacing: var(--track);
+		text-transform: uppercase;
+	}
+
+	/* [ Square brackets ]: the brand's signature typographic device */
+	.bracket::before {
+		content: '[\00a0\00a0';
+	}
+
+	.bracket::after {
+		content: '\00a0\00a0]';
+	}
+
+	.lede {
+		font-family: var(--font-mono);
+		font-weight: 300;
+		font-size: clamp(0.875rem, 1.1vw, 0.9688rem);
+		line-height: 1.8;
+		max-width: 52ch;
+	}
+
+	.prose {
+		display: grid;
+		gap: 1.4em;
+		max-width: 66ch;
+	}
+
+	/* Eyebrow + heading + text stacks share one rhythm */
+	.stack {
+		display: grid;
+		gap: var(--space-3);
+		justify-items: start;
+		align-content: start;
+	}
+
+	.stack > .label + * {
+		margin-top: calc(var(--space-1) * -0.5);
+	}
+
+	/* Buttons: square, solid, no softness */
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.75rem;
+		min-height: 3.5rem;
+		padding: 0 2.5rem;
+		border: 1px solid var(--espresso);
+		background: var(--espresso);
+		color: var(--mineral);
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: var(--track);
+		text-transform: uppercase;
+		text-decoration: none;
+		cursor: pointer;
+		transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+	}
+
+	.btn:hover {
+		background: transparent;
+		color: var(--espresso);
+	}
+
+	.btn--light {
+		background: var(--mineral);
+		color: var(--espresso);
+		border-color: var(--mineral);
+	}
+
+	.btn--light:hover {
+		background: transparent;
+		color: var(--mineral);
+	}
+
+	.link-arrow {
+		display: inline-flex;
+		gap: 0.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: var(--track);
+		text-transform: uppercase;
+		text-decoration: none;
+		border-bottom: 1px solid var(--rule-strong);
+		padding-bottom: 0.4rem;
+		transition: border-color 0.3s ease;
+	}
+
+	.link-arrow:hover {
+		border-bottom-color: currentColor;
+	}
+
+	.link-arrow::after {
+		content: '→';
+		transition: transform 0.3s ease;
+	}
+
+	.link-arrow:hover::after {
+		transform: translateX(4px);
+	}
+
+	/* Dark surfaces swap the ink colours for everything inside them */
+	.on-dark {
+		--ink: var(--mineral);
+		/* Mineral White at 70% on Espresso: 6.4:1; on Moss: 5.7:1 */
+		--ink-muted: #bcb7b9;
+		--rule: rgb(243 241 243 / 0.16);
+		--rule-strong: rgb(243 241 243 / 0.4);
+		color: var(--mineral);
+	}
+
+	/* Imagery: one framing treatment; pair with an aspect-* ratio */
+	.frame {
+		position: relative;
+		overflow: hidden;
+		background: var(--olive-30);
+	}
+
+	.frame img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	/* Page header used on inner pages */
+	.page-head {
+		padding-block: var(--space-6) var(--space-5);
+		display: grid;
+		gap: var(--space-3);
+		justify-items: start;
+	}
+
+	/* Form fields */
+	.field {
+		display: grid;
+		gap: var(--space-1);
+	}
+
+	.field input,
+	.field select,
+	.field textarea {
+		width: 100%;
+		padding: 0.9rem 0;
+		border: 0;
+		border-bottom: 1px solid var(--rule-strong);
+		border-radius: 0;
+		background: transparent;
+		color: inherit;
+		font: inherit;
+		font-size: 1rem;
+		appearance: none;
+		transition: border-color 0.3s ease;
+	}
+
+	.field textarea {
+		min-height: 8rem;
+		resize: vertical;
+	}
+
+	.field input:focus,
+	.field select:focus,
+	.field textarea:focus {
+		outline: none;
+		border-bottom-color: currentColor;
 	}
 }

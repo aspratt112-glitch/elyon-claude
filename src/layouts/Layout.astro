@@ -33,7 +33,9 @@ const pageDescription =
 		<script is:inline>document.documentElement.classList.add('js');</script>
 	</head>
 	<body>
-		{!bare && <a class="skip label" href="#main">Skip to content</a>}
+		{!bare && (
+			<a class="label absolute -top-12 left-4 z-100 bg-espresso px-4 py-3 text-mineral focus:top-4" href="#main">Skip to content</a>
+		)}
 		{!bare && <Header overlay={overlayHeader} />}
 		<main id="main">
 			<slot />
@@ -42,18 +44,3 @@ const pageDescription =
 	</body>
 </html>
 
-<style>
-	.skip {
-		position: absolute;
-		left: 1rem;
-		top: -3rem;
-		z-index: 100;
-		padding: 0.75rem 1rem;
-		background: var(--espresso);
-		color: var(--mineral);
-	}
-
-	.skip:focus {
-		top: 1rem;
-	}
-</style>

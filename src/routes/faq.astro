@@ -6,25 +6,25 @@ const faq = await reader.singletons.faq.readOrThrow();
 ---
 
 <Layout title={faq.seo.title} description={faq.seo.description}>
-	<div class="wrap layout">
-		<header class="page-head head">
-			<p class="label bracket muted">{faq.eyebrow}</p>
-			<h1 class="display">{faq.heading}</h1>
-			<p class="lede muted">{faq.intro}</p>
+	<div class="wrap grid grid-cols-[1fr_1.4fr] gap-[clamp(2rem,6vw,6rem)] pb-section max-desk:grid-cols-1 max-desk:gap-0">
+		<header class="page-head sticky top-20 self-start max-desk:static">
+			<p class="label bracket text-ink-muted">{faq.eyebrow}</p>
+			<h1 class="text-display">{faq.heading}</h1>
+			<p class="lede text-ink-muted">{faq.intro}</p>
 			<a class="link-arrow" href="/contact">Ask us directly</a>
 		</header>
 
-		<div class="groups">
+		<div class="grid gap-space-5 pt-space-6 max-desk:pt-0">
 			{faq.groups.map((group) => (
-				<section class="group">
-					<h2 class="label bracket muted">{group.title}</h2>
+				<section>
+					<h2 class="label bracket mb-4 text-ink-muted">{group.title}</h2>
 					{group.items.map((item) => (
-						<details>
-							<summary>
-								<span class="q">{item.question}</span>
-								<span class="icon" aria-hidden="true"></span>
+						<details class="border-t border-rule last:border-b">
+							<summary class="flex cursor-pointer list-none items-center justify-between gap-8 py-6 [&::-webkit-details-marker]:hidden">
+								<span class="text-[length:clamp(1.05rem,1.6vw,1.3rem)]">{item.question}</span>
+								<span class="icon relative size-[14px] flex-none" aria-hidden="true"></span>
 							</summary>
-							<div class="prose answer">
+							<div class="prose pb-7 font-mono text-sm leading-[1.75] font-light">
 								{paragraphs(item.answer).map((p) => <p>{p}</p>)}
 							</div>
 						</details>
@@ -36,63 +36,7 @@ const faq = await reader.singletons.faq.readOrThrow();
 </Layout>
 
 <style>
-	.layout {
-		display: grid;
-		grid-template-columns: 1fr 1.4fr;
-		gap: clamp(2rem, 6vw, 6rem);
-		padding-bottom: var(--section);
-	}
-
-	.head {
-		position: sticky;
-		top: 5rem;
-		align-self: start;
-		justify-items: start;
-	}
-
-	.groups {
-		display: grid;
-		gap: var(--space-5);
-		padding-top: var(--space-6);
-	}
-
-	.group h2 {
-		margin-bottom: var(--space-2);
-	}
-
-	details {
-		border-top: 1px solid var(--rule);
-	}
-
-	.group details:last-child {
-		border-bottom: 1px solid var(--rule);
-	}
-
-	summary {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 2rem;
-		padding-block: 1.5rem;
-		cursor: pointer;
-		list-style: none;
-	}
-
-	summary::-webkit-details-marker {
-		display: none;
-	}
-
-	.q {
-		font-size: clamp(1.05rem, 1.6vw, 1.3rem);
-	}
-
-	.icon {
-		position: relative;
-		flex: none;
-		width: 14px;
-		height: 14px;
-	}
-
+	/* A plus that turns into a minus as the answer opens */
 	.icon::before,
 	.icon::after {
 		content: '';
@@ -109,28 +53,5 @@ const faq = await reader.singletons.faq.readOrThrow();
 
 	details[open] .icon::after {
 		transform: rotate(0deg);
-	}
-
-	.answer {
-		padding-bottom: 1.75rem;
-		font-family: var(--font-mono);
-		font-weight: 300;
-		font-size: 0.875rem;
-		line-height: 1.75;
-	}
-
-	@media (max-width: 960px) {
-		.layout {
-			grid-template-columns: 1fr;
-			gap: 0;
-		}
-
-		.head {
-			position: static;
-		}
-
-		.groups {
-			padding-top: 0;
-		}
 	}
 </style>

@@ -84,7 +84,7 @@ export default config({
 				seo: seo(),
 				eyebrow: fields.text({ label: 'Label' }),
 				heading: fields.text({ label: 'Heading' }),
-				text: fields.text({ label: 'Text', multiline: true }),
+				text: fields.text({ label: 'Text', multiline: true, description: 'Start a new line for a new paragraph.' }),
 				buttonLabel: fields.text({ label: 'Button label' }),
 				note: fields.text({ label: 'Small print under the form' }),
 				image: image('Image', 'landing'),

@@ -26,54 +26,63 @@ const right = [
 const isCurrent = (href: string) => href === path;
 ---
 
-<div class="announce bg-espresso on-dark">
-	<ul class="wrap label">
-		{mainMessage && <li class="announce-main">{mainMessage}</li>}
+{/* First message sits in the true centre; any others line up on the right */}
+<div class="bg-espresso on-dark">
+	<ul class="wrap label grid grid-cols-[1fr_auto_1fr] items-center gap-8 py-[0.6rem] text-[0.625rem]">
+		{mainMessage && <li class="col-start-2 text-center">{mainMessage}</li>}
 		{otherMessages.length > 0 && (
-			<li class="announce-rest">
+			<li class="col-start-3 flex gap-8 justify-self-end max-nav:hidden">
 				{otherMessages.map((message) => <span>{message}</span>)}
 			</li>
 		)}
 	</ul>
 </div>
 
-<header class="site-header" data-overlay={overlay ? '' : undefined}>
-	<div class="wrap bar">
-		<nav class="nav nav--left" aria-label="Primary">
-			<a href="/" class="mono-link" aria-label="Elyon home">
-				<Monogram class="monogram" />
+<header
+	class="site-header sticky top-0 z-50 border-b border-rule bg-paper transition-[background-color,color,border-color] duration-400 ease-[ease]"
+	data-overlay={overlay ? '' : undefined}
+>
+	<div class="wrap grid min-h-header grid-cols-[1fr_auto_1fr] items-center max-nav:grid-cols-[auto_1fr_auto]">
+		<nav class="flex items-center gap-[clamp(1rem,2.5vw,2.25rem)]" aria-label="Primary">
+			<a href="/" class="border-b border-transparent py-[0.4rem]" aria-label="Elyon home">
+				<Monogram class="h-auto w-[1.6rem]" />
 			</a>
 			{left.map((item) => (
-				<a class="label" href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+				<a class="label border-b border-transparent py-[0.4rem] hover:border-current aria-[current=page]:border-current max-nav:hidden" href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
 					{item.label}
 				</a>
 			))}
 		</nav>
 
-		<a href="/" class="brand" aria-label="Elyon home">
-			<Wordmark class="wordmark" />
+		<a href="/" class="max-nav:justify-self-center" aria-label="Elyon home">
+			<Wordmark class="h-auto w-[clamp(7rem,11vw,9.5rem)]" />
 		</a>
 
-		<nav class="nav nav--right" aria-label="Secondary">
+		<nav class="flex items-center justify-end gap-[clamp(1rem,2.5vw,2.25rem)] max-nav:hidden" aria-label="Secondary">
 			{right.map((item) => (
-				<a class="label" href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+				<a class="label border-b border-transparent py-[0.4rem] hover:border-current aria-[current=page]:border-current max-nav:hidden" href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
 					{item.label}
 				</a>
 			))}
 		</nav>
 
-		<details class="menu">
-			<summary class="label">
-				<span class="menu-open">Menu</span>
-				<span class="menu-close">Close</span>
+		<details class="menu group hidden max-nav:block max-nav:justify-self-end">
+			<summary class="label cursor-pointer list-none py-3 [&::-webkit-details-marker]:hidden">
+				<span class="group-open:hidden">Menu</span>
+				<span class="hidden group-open:inline">Close</span>
 			</summary>
-			<div class="menu-panel bg-espresso on-dark">
-				<ul>
+			{/* Hangs directly under the header (its positioned ancestor), wherever the header
+			    sits, so it never rides up over the logo row when the announcement bar is showing */}
+			<div
+				class="menu-panel bg-espresso on-dark absolute inset-x-0 top-full grid h-[calc(100dvh-var(--header-h))] content-start
+					gap-space-5 overflow-y-auto border-t border-rule px-gutter py-10"
+			>
+				<ul class="grid gap-[1.1rem]">
 					{[...left, ...right].map((item) => (
-						<li><a href={item.href}>{item.label}</a></li>
+						<li><a class="text-[2rem] tracking-normal uppercase" href={item.href}>{item.label}</a></li>
 					))}
 				</ul>
-				<ul class="menu-products label">
+				<ul class="label grid gap-[1.1rem] border-t border-rule pt-8">
 					{products.map((p) => (
 						<li><a href={`/products/${p.slug}`}>{p.name}</a></li>
 					))}
@@ -102,181 +111,24 @@ const isCurrent = (href: string) => href === path;
 </script>
 
 <style>
-	/* First message sits in the true centre; any others line up on the right */
-	.announce ul {
-		display: grid;
-		grid-template-columns: 1fr auto 1fr;
-		align-items: center;
-		gap: 2rem;
-		margin: 0 auto;
-		padding-block: 0.6rem;
-		list-style: none;
-		font-size: 0.625rem;
-	}
-
-	.announce-main {
-		grid-column: 2;
-		text-align: center;
-	}
-
-	.announce-rest {
-		grid-column: 3;
-		justify-self: end;
-		display: flex;
-		gap: 2rem;
-	}
-
-	.site-header {
-		position: sticky;
-		top: 0;
-		z-index: 50;
-		background: var(--paper);
-		border-bottom: 1px solid var(--rule);
-		transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
-	}
-
-	/* Transparent over the banner. Only applied when JavaScript can turn it solid again. */
+	/* Overlay mode: transparent over the home banner. Only applied when JavaScript can turn
+	   it solid again (the script above sets data-solid once the banner scrolls away). */
 	:global(html.js) .site-header[data-overlay]:not([data-solid]) {
 		background: transparent;
 		border-bottom-color: rgb(243 241 243 / 0.2);
 		color: var(--mineral);
 	}
 
-	.bar {
-		display: grid;
-		grid-template-columns: 1fr auto 1fr;
-		align-items: center;
-		min-height: var(--header-h);
+	/* While the menu is open the header joins it as one Espresso surface,
+	   including over the home banner, and the page behind stops scrolling */
+	.site-header:has(.menu[open]),
+	:global(html.js) .site-header[data-overlay]:has(.menu[open]) {
+		background: var(--espresso);
+		color: var(--mineral);
+		border-bottom-color: var(--espresso);
 	}
 
-	.nav {
-		display: flex;
-		align-items: center;
-		gap: clamp(1rem, 2.5vw, 2.25rem);
-	}
-
-	.nav--right {
-		justify-content: flex-end;
-	}
-
-	.nav a {
-		text-decoration: none;
-		padding-block: 0.4rem;
-		border-bottom: 1px solid transparent;
-	}
-
-	.nav a.label:hover,
-	.nav a[aria-current='page'] {
-		border-bottom-color: currentColor;
-	}
-
-	:global(.monogram) {
-		width: 1.6rem;
-		height: auto;
-	}
-
-	:global(.wordmark) {
-		width: clamp(7rem, 11vw, 9.5rem);
-		height: auto;
-	}
-
-	.menu {
-		display: none;
-	}
-
-	@media (max-width: 860px) {
-		.announce-rest {
-			display: none;
-		}
-
-		.bar {
-			grid-template-columns: auto 1fr auto;
-		}
-
-		.nav a.label,
-		.nav--right {
-			display: none;
-		}
-
-		.brand {
-			justify-self: center;
-		}
-
-		.menu {
-			display: block;
-			justify-self: end;
-		}
-
-		.menu summary {
-			list-style: none;
-			cursor: pointer;
-			padding: 0.75rem 0;
-		}
-
-		.menu summary::-webkit-details-marker {
-			display: none;
-		}
-
-		.menu-close,
-		.menu[open] .menu-open {
-			display: none;
-		}
-
-		.menu[open] .menu-close {
-			display: inline;
-		}
-
-		/* Hangs directly under the header (its positioned ancestor), wherever the header
-		   sits, so it never rides up over the logo row when the announcement bar is showing */
-		.menu-panel {
-			position: absolute;
-			top: 100%;
-			left: 0;
-			right: 0;
-			height: calc(100dvh - var(--header-h));
-			padding: var(--space-4) var(--gutter);
-			display: grid;
-			align-content: start;
-			gap: var(--space-5);
-			overflow-y: auto;
-			border-top: 1px solid var(--rule);
-		}
-
-		/* While the menu is open the header joins it as one Espresso surface,
-		   including over the home banner, and the page behind stops scrolling */
-		.site-header:has(.menu[open]),
-		:global(html.js) .site-header[data-overlay]:has(.menu[open]) {
-			background: var(--espresso);
-			color: var(--mineral);
-			border-bottom-color: var(--espresso);
-		}
-
-		:global(html:has(.menu[open])) {
-			overflow: hidden;
-		}
-
-		.menu-panel ul {
-			margin: 0;
-			padding: 0;
-			list-style: none;
-			display: grid;
-			gap: 1.1rem;
-		}
-
-		.menu-panel ul:first-child a {
-			font-size: 2rem;
-			text-transform: uppercase;
-			letter-spacing: 0;
-			text-decoration: none;
-		}
-
-		.menu-products {
-			border-top: 1px solid var(--rule);
-			padding-top: 2rem !important;
-		}
-
-		.menu-products a {
-			text-decoration: none;
-		}
+	:global(html:has(.menu[open])) {
+		overflow: hidden;
 	}
 </style>

@@ -8,59 +8,67 @@ const products = await getProducts();
 const year = new Date().getFullYear();
 ---
 
-<footer class="footer bg-espresso on-dark">
-	<div class="wrap top">
-		<div class="col">
-			<p class="label heading">Explore</p>
-			<ul>
-				<li><a href="/#system">Shop</a></li>
-				<li><a href="/story">Our Story</a></li>
-				<li><a href="/mission">Mission</a></li>
-				<li><a href="/faq">FAQs</a></li>
-				<li><a href="/contact">Contact</a></li>
+<footer class="bg-espresso on-dark pt-[clamp(4rem,8vw,6rem)]">
+	<div class="wrap grid grid-cols-[repeat(3,minmax(0,1fr))_minmax(0,1.6fr)] gap-10 max-nav:grid-cols-2">
+		<div>
+			<p class="label mb-5 text-ink-muted">Explore</p>
+			<ul class="grid gap-[0.55rem] text-[0.9375rem]">
+				<li><a class="hover:underline hover:underline-offset-4" href="/#system">Shop</a></li>
+				<li><a class="hover:underline hover:underline-offset-4" href="/story">Our Story</a></li>
+				<li><a class="hover:underline hover:underline-offset-4" href="/mission">Mission</a></li>
+				<li><a class="hover:underline hover:underline-offset-4" href="/faq">FAQs</a></li>
+				<li><a class="hover:underline hover:underline-offset-4" href="/contact">Contact</a></li>
 			</ul>
 		</div>
 
-		<div class="col">
-			<p class="label heading">The System</p>
-			<ul>
-				{products.map((p) => <li><a href={`/products/${p.slug}`}>{p.name}</a></li>)}
+		<div>
+			<p class="label mb-5 text-ink-muted">The System</p>
+			<ul class="grid gap-[0.55rem] text-[0.9375rem]">
+				{products.map((p) => <li><a class="hover:underline hover:underline-offset-4" href={`/products/${p.slug}`}>{p.name}</a></li>)}
 			</ul>
 		</div>
 
-		<div class="col">
-			<p class="label heading">Connect</p>
-			<ul>
-				{settings.instagram && <li><a href={settings.instagram} rel="noopener">Instagram</a></li>}
-				{settings.facebook && <li><a href={settings.facebook} rel="noopener">Facebook</a></li>}
-				{settings.email && <li><a href={`mailto:${settings.email}`}>{settings.email}</a></li>}
+		<div>
+			<p class="label mb-5 text-ink-muted">Connect</p>
+			<ul class="grid gap-[0.55rem] text-[0.9375rem]">
+				{settings.instagram && <li><a class="hover:underline hover:underline-offset-4" href={settings.instagram} rel="noopener">Instagram</a></li>}
+				{settings.facebook && <li><a class="hover:underline hover:underline-offset-4" href={settings.facebook} rel="noopener">Facebook</a></li>}
+				{settings.email && <li><a class="hover:underline hover:underline-offset-4" href={`mailto:${settings.email}`}>{settings.email}</a></li>}
 			</ul>
 		</div>
 
 		<form
-			class="col newsletter"
+			class="max-nav:col-span-full"
 			id="newsletter"
 			data-klaviyo-key={settings.klaviyo.publicKey}
 			data-klaviyo-list={settings.klaviyo.listId}
 			data-source="Footer"
 		>
-			<p class="label heading">{settings.newsletterHeading}</p>
-			<p class="mono">{settings.newsletterText}</p>
-			<div class="signup">
-				<label class="visually-hidden" for="newsletter-email">Email address</label>
-				<input id="newsletter-email" name="email" type="email" placeholder="Email address" required autocomplete="email" />
-				<button class="label" type="submit">Join</button>
+			<p class="label mb-5 text-ink-muted">{settings.newsletterHeading}</p>
+			<p class="mono mb-6 max-w-[42ch]">{settings.newsletterText}</p>
+			<div class="signup flex border-b border-mineral">
+				<label class="sr-only" for="newsletter-email">Email address</label>
+				<input
+					class="min-w-0 flex-1 py-[0.9rem] placeholder:text-[rgb(243_241_243/0.55)] focus:outline-none"
+					id="newsletter-email"
+					name="email"
+					type="email"
+					placeholder="Email address"
+					required
+					autocomplete="email"
+				/>
+				<button class="label cursor-pointer pl-4" type="submit">Join</button>
 			</div>
-			<p class="label status" role="status" hidden></p>
+			<p class="status label mt-4" role="status" hidden></p>
 		</form>
 	</div>
 
-	<div class="wrap marks">
-		<Wordmark class="big-wordmark" />
-		<div class="base label">
-			<Monogram class="mono-mark" />
+	<div class="wrap pt-[clamp(4rem,10vw,8rem)] pb-6">
+		<Wordmark class="h-auto w-full" />
+		<div class="label mt-8 flex items-center gap-6 border-t border-rule pt-5 text-[0.625rem] max-nav:flex-wrap">
+			<Monogram class="h-auto w-7" />
 			<span>{settings.footerTagline}</span>
-			<span>© {year} Elyon Labs</span>
+			<span class="ml-auto">© {year} Elyon Labs</span>
 		</div>
 	</div>
 </footer>
@@ -86,120 +94,3 @@ const year = new Date().getFullYear();
 	}
 </script>
 
-<style>
-	.footer {
-		padding-top: clamp(4rem, 8vw, 6rem);
-	}
-
-	.top {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.6fr);
-		gap: 2.5rem;
-	}
-
-	.heading {
-		margin-bottom: 1.25rem;
-		color: var(--ink-muted);
-	}
-
-	ul {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-		display: grid;
-		gap: 0.55rem;
-		font-size: 0.9375rem;
-	}
-
-	ul a {
-		text-decoration: none;
-	}
-
-	ul a:hover {
-		text-decoration: underline;
-		text-underline-offset: 4px;
-	}
-
-	.newsletter .mono {
-		max-width: 42ch;
-		margin-bottom: 1.5rem;
-	}
-
-	.signup {
-		display: flex;
-		border-bottom: 1px solid var(--mineral);
-	}
-
-	.signup input {
-		flex: 1;
-		min-width: 0;
-		padding: 0.9rem 0;
-		border: 0;
-		background: transparent;
-		color: inherit;
-		font: inherit;
-	}
-
-	.signup input::placeholder {
-		color: rgb(243 241 243 / 0.55);
-	}
-
-	.signup input:focus {
-		outline: none;
-	}
-
-	.signup button {
-		border: 0;
-		background: transparent;
-		color: inherit;
-		cursor: pointer;
-		padding-inline: 1rem 0;
-	}
-
-	.status {
-		margin-top: 1rem;
-	}
-
-	.marks {
-		padding-top: clamp(4rem, 10vw, 8rem);
-		padding-bottom: 1.5rem;
-	}
-
-	:global(.big-wordmark) {
-		width: 100%;
-		height: auto;
-	}
-
-	.base {
-		display: flex;
-		align-items: center;
-		gap: 1.5rem;
-		margin-top: 2rem;
-		padding-top: 1.25rem;
-		border-top: 1px solid var(--rule);
-		font-size: 0.625rem;
-	}
-
-	.base span:last-child {
-		margin-left: auto;
-	}
-
-	:global(.mono-mark) {
-		width: 1.75rem;
-		height: auto;
-	}
-
-	@media (max-width: 860px) {
-		.top {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-
-		.newsletter {
-			grid-column: 1 / -1;
-		}
-
-		.base {
-			flex-wrap: wrap;
-		}
-	}
-</style>

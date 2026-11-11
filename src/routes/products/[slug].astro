@@ -25,30 +25,30 @@ const specs = [
 ---
 
 <Layout title={`${product.name} | Elyon`} description={product.seoDescription || product.summary}>
-	<div class="wrap crumbs label">
-		<a href="/#system">The System</a>
+	<div class="wrap label flex gap-4 py-6 text-ink-muted">
+		<a class="hover:text-ink" href="/#system">The System</a>
 		<span aria-hidden="true">/</span>
-		<span aria-current="page">{product.name}</span>
+		<span class="text-ink" aria-current="page">{product.name}</span>
 	</div>
 
-	<section class="wrap product">
-		<div class="frame ratio-portrait media">
+	<section class="wrap grid grid-cols-[7fr_5fr] items-start gap-space-6 pb-section max-desk:grid-cols-1 max-desk:gap-10">
+		<div class="frame sticky top-26 aspect-4/5 max-desk:static">
 			{product.image && <img src={product.image} alt={product.name} width="1200" height="1500" fetchpriority="high" />}
 		</div>
 
-		<div class="info">
+		<div class="grid justify-items-start gap-10 pt-10 max-desk:pt-0">
 			<div class="stack">
-				<p class="label bracket muted">{stepNumber(product.step)}&nbsp;&nbsp;{product.stepLabel}</p>
-				<h1 class="display">{product.name}</h1>
-				<p class="label bracket muted">{product.keyNotes}</p>
+				<p class="label bracket text-ink-muted">{stepNumber(product.step)}&nbsp;&nbsp;{product.stepLabel}</p>
+				<h1 class="text-display">{product.name}</h1>
+				<p class="label bracket text-ink-muted">{product.keyNotes}</p>
 			</div>
 			<p class="lede">{product.summary}</p>
 
-			<dl class="specs">
+			<dl class="w-full border-t border-rule">
 				{specs.map((spec) => (
-					<div>
-						<dt class="label muted">{spec.label}</dt>
-						<dd>{spec.value}</dd>
+					<div class="grid grid-cols-[8rem_1fr] items-baseline border-b border-rule py-4">
+						<dt class="label text-ink-muted">{spec.label}</dt>
+						<dd class="text-[0.9375rem]">{spec.value}</dd>
 					</div>
 				))}
 			</dl>
@@ -59,30 +59,32 @@ const specs = [
 				<a class="btn" href="/contact">Enquire to order</a>
 			)}
 
-			<div class="prose description">
+			<div class="prose border-t border-rule pt-10">
 				{paragraphs(product.description).map((p) => <p>{p}</p>)}
 			</div>
 		</div>
 	</section>
 
-	<section class="section details">
-		<div class="wrap detail-grid">
+	<section class="border-t border-rule py-section">
+		<div class="wrap grid grid-cols-3 gap-space-5 max-desk:grid-cols-1">
 			{product.benefits.length > 0 && (
-				<div class="block">
-					<h2 class="label bracket muted">What it does</h2>
-					<ul class="benefits">
-						{product.benefits.map((b) => <li>{b}</li>)}
+				<div class="grid content-start gap-10">
+					<h2 class="label bracket border-b border-rule-strong pb-4 text-ink-muted">What it does</h2>
+					<ul class="grid gap-4">
+						{product.benefits.map((b) => (
+							<li class="grid grid-cols-[1.75rem_1fr] before:font-mono before:text-ink-muted before:content-['+']">{b}</li>
+						))}
 					</ul>
 				</div>
 			)}
 
 			{product.ingredients.length > 0 && (
-				<div class="block">
-					<h2 class="label bracket muted">Key ingredients</h2>
-					<dl class="ingredients">
+				<div class="grid content-start gap-10">
+					<h2 class="label bracket border-b border-rule-strong pb-4 text-ink-muted">Key ingredients</h2>
+					<dl class="grid gap-6">
 						{product.ingredients.map((ing) => (
-							<div>
-								<dt class="h3">{ing.title}</dt>
+							<div class="grid gap-2 border-b border-rule pb-6 last:border-b-0 last:pb-0">
+								<dt class="text-[1rem] leading-[1.25]">{ing.title}</dt>
 								<dd class="mono">{ing.text}</dd>
 							</div>
 						))}
@@ -90,21 +92,21 @@ const specs = [
 				</div>
 			)}
 
-			<div class="block">
-				<h2 class="label bracket muted">How to use</h2>
+			<div class="grid content-start gap-10">
+				<h2 class="label bracket border-b border-rule-strong pb-4 text-ink-muted">How to use</h2>
 				<div class="prose">
 					{paragraphs(product.howToUse).map((p) => <p>{p}</p>)}
 				</div>
-				<dl class="facts">
+				<dl class="grid gap-6 border-t border-rule pt-6">
 					{product.texture && (
-						<div>
-							<dt class="label muted">Texture &amp; finish</dt>
+						<div class="grid gap-2">
+							<dt class="label text-ink-muted">Texture &amp; finish</dt>
 							<dd class="mono">{product.texture}</dd>
 						</div>
 					)}
 					{product.freeFrom && (
-						<div>
-							<dt class="label muted">Free from</dt>
+						<div class="grid gap-2">
+							<dt class="label text-ink-muted">Free from</dt>
 							<dd class="mono">{product.freeFrom}</dd>
 						</div>
 					)}
@@ -113,188 +115,15 @@ const specs = [
 		</div>
 	</section>
 
-	<section class="section more rule-top">
+	<section class="border-t border-rule py-section">
 		<div class="wrap">
-			<div class="stack more-head">
-				<p class="label bracket muted">Complete the system</p>
-				<h2 class="h2">Three products. One system.</h2>
+			<div class="stack mb-space-5">
+				<p class="label bracket text-ink-muted">Complete the system</p>
+				<h2 class="text-h2">Three products. One system.</h2>
 			</div>
-			<div class="more-grid">
+			<div class="grid max-w-[960px] grid-cols-2 gap-10 max-desk:grid-cols-1">
 				{others.map((p) => <ProductCard product={p} />)}
 			</div>
 		</div>
 	</section>
 </Layout>
-
-<style>
-	.crumbs {
-		display: flex;
-		gap: var(--space-2);
-		padding-block: var(--space-3);
-		color: var(--ink-muted);
-	}
-
-	.crumbs a {
-		text-decoration: none;
-	}
-
-	.crumbs a:hover {
-		color: var(--ink);
-	}
-
-	.crumbs [aria-current] {
-		color: var(--ink);
-	}
-
-	.product {
-		display: grid;
-		grid-template-columns: 7fr 5fr;
-		gap: var(--space-6);
-		align-items: start;
-		padding-bottom: var(--section);
-	}
-
-	.media {
-		position: sticky;
-		top: 6.5rem;
-	}
-
-	.info {
-		display: grid;
-		gap: var(--space-4);
-		justify-items: start;
-		padding-top: var(--space-4);
-	}
-
-	.specs {
-		width: 100%;
-		margin: 0;
-		border-top: 1px solid var(--rule);
-	}
-
-	.specs div {
-		display: grid;
-		grid-template-columns: 8rem 1fr;
-		align-items: baseline;
-		padding-block: var(--space-2);
-		border-bottom: 1px solid var(--rule);
-	}
-
-	.specs dd {
-		margin: 0;
-		font-size: 0.9375rem;
-	}
-
-	.description {
-		padding-top: var(--space-4);
-		border-top: 1px solid var(--rule);
-	}
-
-	.details {
-		border-top: 1px solid var(--rule);
-	}
-
-	.detail-grid {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: var(--space-5);
-	}
-
-	.block {
-		display: grid;
-		align-content: start;
-		gap: var(--space-4);
-	}
-
-	.block > h2 {
-		padding-bottom: var(--space-2);
-		border-bottom: 1px solid var(--rule-strong);
-	}
-
-	.benefits {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-		display: grid;
-		gap: var(--space-2);
-	}
-
-	.benefits li {
-		display: grid;
-		grid-template-columns: 1.75rem 1fr;
-	}
-
-	.benefits li::before {
-		content: '+';
-		font-family: var(--font-mono);
-		color: var(--ink-muted);
-	}
-
-	.ingredients,
-	.facts {
-		margin: 0;
-		display: grid;
-		gap: var(--space-3);
-	}
-
-	.ingredients div {
-		display: grid;
-		gap: var(--space-1);
-		padding-bottom: var(--space-3);
-		border-bottom: 1px solid var(--rule);
-	}
-
-	.ingredients div:last-child {
-		border-bottom: 0;
-		padding-bottom: 0;
-	}
-
-	.ingredients dt {
-		font-size: 1rem;
-	}
-
-	dd {
-		margin: 0;
-	}
-
-	.facts {
-		padding-top: var(--space-3);
-		border-top: 1px solid var(--rule);
-	}
-
-	.facts div {
-		display: grid;
-		gap: var(--space-1);
-	}
-
-	.more-head {
-		margin-bottom: var(--space-5);
-	}
-
-	.more-grid {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: var(--space-4);
-		max-width: 960px;
-	}
-
-	@media (max-width: 960px) {
-		.product,
-		.detail-grid,
-		.more-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.product {
-			gap: var(--space-4);
-		}
-
-		.media {
-			position: static;
-		}
-
-		.info {
-			padding-top: 0;
-		}
-	}
-</style>

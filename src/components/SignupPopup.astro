@@ -14,50 +14,64 @@ const { eyebrow, heading, text, buttonLabel, image } = Astro.props;
 const settings = await getSettings();
 ---
 
-<dialog class="signup-popup bg-espresso on-dark" aria-labelledby="signup-popup-heading">
-	<div class="shell" class:list={{ 'has-image': image }}>
+<dialog
+	class="signup-popup bg-espresso on-dark max-h-[calc(100dvh-2rem)] w-[min(100%-2rem,44rem)] overflow-auto border border-rule
+		text-mineral open:animate-popup-in motion-reduce:open:animate-none backdrop:bg-[rgb(61_47_48/0.6)] backdrop:backdrop-blur-[2px]"
+	aria-labelledby="signup-popup-heading"
+>
+	<div class:list={[image && 'grid grid-cols-[2fr_3fr] max-[721px]:relative max-[721px]:grid-cols-1']}>
 		{image && (
-			<div class="media">
-				<img src={image} alt="" loading="lazy" />
+			// On phones the photo sits behind the form at half strength
+			<div class="relative bg-moss max-[721px]:absolute max-[721px]:inset-0 max-[721px]:opacity-50">
+				<img class="absolute inset-0 size-full object-cover object-[30%_50%] max-[721px]:object-[40%_50%]" src={image} alt="" loading="lazy" />
 			</div>
 		)}
 
+		{/* Over the photo on phones, the softer grey text loses contrast, so it all goes full Mineral White */}
 		<form
-			class="body"
+			class="relative grid gap-6 px-[clamp(1.25rem,3vw,2.25rem)] pt-10 pb-6
+				max-[721px]:[--ink-muted:var(--mineral)] max-[721px]:[text-shadow:0_1px_12px_rgb(61_47_48/0.6)]"
 			data-klaviyo-key={settings.klaviyo.publicKey}
 			data-klaviyo-list={settings.klaviyo.listId}
 			data-source="Home page popup"
 		>
-			<button class="close label" type="button" data-close aria-label="Close">Close ✕</button>
+			<button class="label absolute top-4 right-6 cursor-pointer py-2" type="button" data-close aria-label="Close">Close ✕</button>
 
-			<div class="stack">
-				<Monogram class="popup-mark" />
-				{eyebrow && <p class="label bracket muted">{eyebrow}</p>}
-				<h2 class="h2" id="signup-popup-heading">{heading}</h2>
-				{text && <p class="mono">{text}</p>}
+			<div class="stack gap-4">
+				<Monogram class="h-auto w-[1.4rem]" />
+				{eyebrow && <p class="label bracket text-ink-muted">{eyebrow}</p>}
+				<h2 class="text-[length:clamp(1.35rem,2vw,1.75rem)]" id="signup-popup-heading">{heading}</h2>
+				{text && <p class="mono max-w-[42ch] text-[0.75rem]">{text}</p>}
 			</div>
 
-			<div class="fields" data-signup-step>
+			<div class="grid grid-cols-2 gap-x-6 gap-y-4 max-[721px]:grid-cols-1" data-signup-step>
 				<div class="field">
-					<label class="label muted" for="popup-first-name">First name</label>
-					<input id="popup-first-name" name="firstName" type="text" required autocomplete="given-name" />
+					<label class="label text-ink-muted" for="popup-first-name">First name</label>
+					<input class="py-[0.55rem] text-[0.9375rem]" id="popup-first-name" name="firstName" type="text" required autocomplete="given-name" />
 				</div>
 				<div class="field">
-					<label class="label muted" for="popup-last-name">Last name</label>
-					<input id="popup-last-name" name="lastName" type="text" required autocomplete="family-name" />
+					<label class="label text-ink-muted" for="popup-last-name">Last name</label>
+					<input class="py-[0.55rem] text-[0.9375rem]" id="popup-last-name" name="lastName" type="text" required autocomplete="family-name" />
 				</div>
-				<div class="field field--full">
-					<label class="label muted" for="popup-email">Email</label>
-					<input id="popup-email" name="email" type="email" required autocomplete="email" />
+				<div class="field col-span-full">
+					<label class="label text-ink-muted" for="popup-email">Email</label>
+					<input class="py-[0.55rem] text-[0.9375rem]" id="popup-email" name="email" type="email" required autocomplete="email" />
 				</div>
 			</div>
 
-			<button class="btn btn--light submit" type="submit" data-signup-step>{buttonLabel || 'Join'}</button>
-			<p class="label error" role="alert" hidden>
+			<button class="btn btn--light min-h-12 w-full" type="submit" data-signup-step>{buttonLabel || 'Join'}</button>
+			<p class="error label text-center" role="alert" hidden>
 				Something went wrong. Please try again{settings.email && `, or email us at ${settings.email}`}.
 			</p>
-			<button class="later label" type="button" data-close data-signup-step>No thanks</button>
-			<p class="thanks h3" role="status" hidden>Thank you. You're on the list.</p>
+			<button
+				class="label -mt-2 cursor-pointer justify-self-center border-b border-rule-strong py-2 text-ink-muted hover:text-mineral"
+				type="button"
+				data-close
+				data-signup-step
+			>
+				No thanks
+			</button>
+			<p class="thanks text-h3 border-t border-rule pt-4 pb-6" role="status" hidden>Thank you. You're on the list.</p>
 		</form>
 	</div>
 </dialog>
@@ -97,163 +111,3 @@ const settings = await getSettings();
 	}
 </script>
 
-<style>
-	.signup-popup {
-		width: min(100% - 2rem, 44rem);
-		max-height: calc(100dvh - 2rem);
-		padding: 0;
-		border: 1px solid var(--rule);
-		border-radius: 0;
-		color: var(--mineral);
-		overflow: auto;
-	}
-
-	.signup-popup[open] {
-		animation: popup-in 0.5s ease both;
-	}
-
-	.signup-popup::backdrop {
-		background: rgb(61 47 48 / 0.6);
-		backdrop-filter: blur(2px);
-	}
-
-	@keyframes popup-in {
-		from {
-			opacity: 0;
-			transform: translateY(12px);
-		}
-	}
-
-	.shell.has-image {
-		display: grid;
-		grid-template-columns: 2fr 3fr;
-	}
-
-	.media {
-		position: relative;
-		background: var(--moss);
-	}
-
-	.media img {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		object-position: 30% 50%;
-	}
-
-	.body {
-		position: relative;
-		display: grid;
-		gap: var(--space-3);
-		padding: var(--space-4) clamp(1.25rem, 3vw, 2.25rem) var(--space-3);
-	}
-
-	.body .h2 {
-		font-size: clamp(1.35rem, 2vw, 1.75rem);
-	}
-
-	.body .stack {
-		gap: var(--space-2);
-	}
-
-	.body .mono {
-		max-width: 42ch;
-		font-size: 0.75rem;
-	}
-
-	:global(.popup-mark) {
-		width: 1.4rem;
-		height: auto;
-	}
-
-	.close {
-		position: absolute;
-		top: var(--space-2);
-		right: var(--space-3);
-		padding: 0.5rem 0;
-		border: 0;
-		background: transparent;
-		color: inherit;
-		cursor: pointer;
-	}
-
-	.fields {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: var(--space-2) var(--space-3);
-	}
-
-	.fields input {
-		padding-block: 0.55rem;
-		font-size: 0.9375rem;
-	}
-
-	.field--full {
-		grid-column: 1 / -1;
-	}
-
-	.submit {
-		width: 100%;
-		min-height: 3rem;
-	}
-
-	.error {
-		text-align: center;
-	}
-
-	.thanks {
-		padding-block: var(--space-2) var(--space-3);
-		border-top: 1px solid var(--rule);
-	}
-
-	.later {
-		justify-self: center;
-		margin-top: calc(var(--space-1) * -1);
-		padding: 0.5rem 0;
-		border: 0;
-		border-bottom: 1px solid var(--rule-strong);
-		background: transparent;
-		color: var(--ink-muted);
-		cursor: pointer;
-	}
-
-	.later:hover {
-		color: var(--mineral);
-	}
-
-	@media (max-width: 720px) {
-		.shell.has-image {
-			position: relative;
-			grid-template-columns: 1fr;
-		}
-
-		/* On phones the photo sits behind the form at half strength */
-		.media {
-			position: absolute;
-			inset: 0;
-			opacity: 0.5;
-		}
-
-		.media img {
-			object-position: 40% 50%;
-		}
-
-		/* Over the photo, the softer grey text loses contrast, so it all goes full Mineral White */
-		.body {
-			--ink-muted: var(--mineral);
-			text-shadow: 0 1px 12px rgb(61 47 48 / 0.6);
-		}
-
-		.fields {
-			grid-template-columns: 1fr;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.signup-popup[open] {
-			animation: none;
-		}
-	}
-</style>
