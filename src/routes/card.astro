@@ -1,0 +1,264 @@
+---
+// Digital business card, after the business card in the Elyon Brand Guidelines (Print, p.25).
+// Add it to a phone's home screen to keep it to hand; others scan the QR code to open it
+// and save the contact. Details are edited in Keystatic under "Digital business card".
+import QRCode from 'qrcode';
+import '../styles/global.css';
+import Monogram from '../components/logos/Monogram.astro';
+import WordmarkLabs from '../components/logos/WordmarkLabs.astro';
+import { getCard } from '../lib/card';
+
+const card = await getCard(Astro.url.origin);
+
+const qrSvg = await QRCode.toString(card.cardUrl, {
+	type: 'svg',
+	margin: 0,
+	errorCorrectionLevel: 'M',
+	color: { dark: '#3d2f30', light: '#0000' },
+});
+
+const pageTitle = `${card.name} · Elyon Labs`;
+const description = `${card.title}, Elyon Labs. Premium men's haircare, made in Australia.`;
+---
+
+<!doctype html>
+<html lang="en-AU">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<meta name="robots" content="noindex" />
+		<meta name="description" content={description} />
+		<meta name="theme-color" content="#eae1db" />
+		<meta name="color-scheme" content="light" />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="apple-touch-icon" href="/card/apple-touch-icon.png" />
+		<link rel="manifest" href="/card/manifest.webmanifest" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-title" content="Elyon Card" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+		<title>{pageTitle}</title>
+	</head>
+	<body class="card-page">
+		<main class="card-wrap">
+			<div class="card" data-card>
+				<div class="card__inner">
+					<div class="face face--front" aria-hidden="true">
+						<WordmarkLabs class="card__wordmark" />
+					</div>
+					<div class="face face--back">
+						<p class="card__details">
+							<span>{card.name}</span>
+							<span>{card.title}</span>
+							{card.phone && <a href={`tel:${card.phoneE164}`}>{card.phone}</a>}
+						</p>
+						<Monogram class="card__monogram" />
+						<p class="card__details">
+							<span>Mens&nbsp;&nbsp;Premium&nbsp;&nbsp;Haircare</span>
+							<span>Made in Australia</span>
+							{card.instagram && <a href={card.instagramUrl} rel="noopener">@{card.instagram.replace(/^@/, '')}</a>}
+						</p>
+					</div>
+				</div>
+			</div>
+			<button class="flip label" type="button" data-flip aria-label="Flip the card">Tap card to flip</button>
+
+			<figure class="qr">
+				<div class="qr__code" set:html={qrSvg} role="img" aria-label={`QR code that opens ${card.cardUrl}`} />
+				<figcaption class="label">Scan to save my details</figcaption>
+			</figure>
+
+			<div class="actions">
+				<a class="btn" href="/card/contact.vcf">Save contact</a>
+				<button class="btn btn--outline" type="button" data-share data-url={card.cardUrl} data-title={pageTitle}>
+					Share link
+				</button>
+			</div>
+		</main>
+
+		<script>
+			const card = document.querySelector<HTMLElement>('[data-card]')!;
+			const flipButton = document.querySelector<HTMLButtonElement>('[data-flip]')!;
+			const flip = () => card.classList.toggle('is-flipped');
+
+			card.addEventListener('click', (event) => {
+				// Let the phone number and Instagram links work without flipping
+				if ((event.target as HTMLElement).closest('a')) return;
+				flip();
+			});
+			flipButton.addEventListener('click', flip);
+
+			// Open on the brand side, then turn to the details, like handing over the card
+			const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			if (reduceMotion) card.classList.add('is-flipped');
+			else setTimeout(() => card.classList.add('is-flipped'), 900);
+
+			const share = document.querySelector<HTMLButtonElement>('[data-share]')!;
+			share.addEventListener('click', async () => {
+				const { url = '', title = '' } = share.dataset;
+				if (navigator.share) {
+					try {
+						await navigator.share({ title, url });
+					} catch {
+						// Closing the share sheet isn't an error worth showing
+					}
+					return;
+				}
+				try {
+					await navigator.clipboard.writeText(url);
+					share.textContent = 'Link copied';
+				} catch {
+					share.textContent = url;
+				}
+			});
+		</script>
+
+		<style>
+			.card-page {
+				min-height: 100dvh;
+				background: var(--stone);
+				color: var(--espresso);
+			}
+
+			.card-wrap {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: var(--space-3);
+				width: min(100%, 26rem);
+				min-height: 100dvh;
+				margin-inline: auto;
+				padding: max(var(--space-4), env(safe-area-inset-top)) 1rem max(var(--space-3), env(safe-area-inset-bottom));
+				justify-content: center;
+			}
+
+			/* The card itself: 90 × 55 mm, espresso stock, flips like the printed card */
+			.card {
+				width: 100%;
+				aspect-ratio: 90 / 55;
+				perspective: 1400px;
+				container-type: inline-size;
+				cursor: pointer;
+				-webkit-tap-highlight-color: transparent;
+			}
+
+			.card__inner {
+				position: relative;
+				width: 100%;
+				height: 100%;
+				transform-style: preserve-3d;
+				transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+			}
+
+			.card.is-flipped .card__inner {
+				transform: rotateY(180deg);
+			}
+
+			.face {
+				position: absolute;
+				inset: 0;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				background: var(--espresso);
+				color: var(--mineral);
+				backface-visibility: hidden;
+				-webkit-backface-visibility: hidden;
+				box-shadow:
+					0 1px 2px rgb(61 47 48 / 0.25),
+					0 12px 32px -12px rgb(61 47 48 / 0.45);
+			}
+
+			.face--back {
+				transform: rotateY(180deg);
+				justify-content: space-between;
+				padding: 9cqw 8cqw;
+			}
+
+			.card :global(.card__wordmark) {
+				display: block;
+				width: 72%;
+				height: auto;
+			}
+
+			.card__details {
+				display: grid;
+				justify-items: center;
+				font-family: var(--font-mono);
+				font-weight: 400;
+				font-size: 2.65cqw;
+				line-height: 1.35;
+				letter-spacing: var(--track);
+				text-transform: uppercase;
+				text-align: center;
+			}
+
+			.card__details a {
+				color: inherit;
+				text-decoration: none;
+			}
+
+			.card :global(.card__monogram) {
+				display: block;
+				width: 7.5cqw;
+				height: auto;
+			}
+
+			.flip {
+				margin-top: calc(var(--space-1) * -1);
+				padding: var(--space-1) var(--space-2);
+				background: none;
+				border: 0;
+				color: var(--ink-muted);
+				cursor: pointer;
+			}
+
+			.qr {
+				display: grid;
+				justify-items: center;
+				gap: var(--space-2);
+				padding: var(--space-3);
+				background: var(--mineral);
+			}
+
+			.qr__code {
+				width: min(58vw, 13.5rem);
+				aspect-ratio: 1;
+			}
+
+			.qr__code :global(svg) {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+
+			.qr figcaption {
+				color: var(--ink-muted);
+			}
+
+			.actions {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: var(--space-1);
+				width: 100%;
+			}
+
+			.actions .btn {
+				padding: 0 1rem;
+			}
+
+			.btn--outline {
+				background: transparent;
+				color: var(--espresso);
+			}
+
+			.btn--outline:hover {
+				background: var(--espresso);
+				color: var(--mineral);
+			}
+		</style>
+	</body>
+</html>

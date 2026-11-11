@@ -1,0 +1,16 @@
+# Netlify build settings, so the site deploys the same way every time.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Matches the Node version this site is developed on
+  NODE_VERSION = "24"
+
+# The digital business card's "Save contact" file: served as a contact so phones
+# open it in Contacts instead of downloading it as a plain file
+[[headers]]
+  for = "/card/contact.vcf"
+  [headers.values]
+    Content-Type = "text/vcard; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"

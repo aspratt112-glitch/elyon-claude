@@ -32,6 +32,10 @@ function routes() {
 			'astro:config:setup': ({ injectRoute }) => {
 				const add = (pattern, file) => injectRoute({ pattern, entrypoint: `./src/routes/${file}` });
 
+				// The digital business card is always published, before and after launch
+				add('/card', 'card.astro');
+				add('/card/contact.vcf', 'card-contact.ts');
+
 				if (launched || isDev) fullSite.forEach(([pattern, file]) => add(pattern, file));
 
 				if (launched) return;

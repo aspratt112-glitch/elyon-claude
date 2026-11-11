@@ -1,0 +1,13 @@
+{
+	"name": "Elyon Labs Card",
+	"short_name": "Elyon Card",
+	"start_url": "/card",
+	"scope": "/card",
+	"display": "standalone",
+	"background_color": "#eae1db",
+	"theme_color": "#eae1db",
+	"icons": [
+		{ "src": "/card/icon-192.png", "sizes": "192x192", "type": "image/png" },
+		{ "src": "/card/icon-512.png", "sizes": "512x512", "type": "image/png" }
+	]
+}

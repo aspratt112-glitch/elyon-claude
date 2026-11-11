@@ -77,6 +77,21 @@ export default config({
 				footerTagline: fields.text({ label: 'Footer tagline' }),
 			},
 		}),
+		card: singleton({
+			label: 'Digital business card',
+			path: 'src/content/card',
+			schema: {
+				name: fields.text({ label: 'Name' }),
+				title: fields.text({ label: 'Title' }),
+				phone: fields.text({ label: 'Mobile', description: 'As it should appear, e.g. 0400 000 000.' }),
+				email: fields.text({ label: 'Email' }),
+				siteUrl: fields.url({
+					label: 'Website address',
+					description: "The live site's address. The QR code opens the card at this address + /card.",
+				}),
+				instagram: fields.text({ label: 'Instagram handle', description: 'Without the @.' }),
+			},
+		}),
 		landing: singleton({
 			label: 'Landing page (pre-launch)',
 			path: 'src/content/pages/landing',
