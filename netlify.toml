@@ -7,10 +7,35 @@
   # Matches the Node version this site is developed on
   NODE_VERSION = "24"
 
-# The digital business card's "Save contact" file: served as a contact so phones
-# open it in Contacts instead of downloading it as a plain file
+# The digital business cards' "Save contact" files: served as contacts so phones
+# open them in Contacts instead of downloading them as plain files
 [[headers]]
-  for = "/card/contact.vcf"
+  for = "/card/*/contact.vcf"
   [headers.values]
     Content-Type = "text/vcard; charset=utf-8"
     Cache-Control = "public, max-age=0, must-revalidate"
+
+# Andrew's card was at /card before each person had their own; keep old QR codes working
+[[redirects]]
+  from = "/card"
+  to = "/card/andrew/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/card/"
+  to = "/card/andrew/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/card/contact.vcf"
+  to = "/card/andrew/contact.vcf"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/card/manifest.webmanifest"
+  to = "/card/andrew/manifest.webmanifest"
+  status = 301
+  force = true

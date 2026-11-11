@@ -2,22 +2,32 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { reader } from './content';
 
-/** The digital business card's details, edited in Keystatic under "Digital business card". */
-export async function getCard(origin: string) {
-	const card = await reader.singletons.card.readOrThrow();
-	const site = (card.siteUrl || origin).replace(/\/+$/, '');
-	return {
-		...card,
-		site,
-		/** The address the QR code opens: this card, on the live site. */
-		cardUrl: `${site}/card/`,
+/** The live site. QR codes always point here, even when the card is previewed locally. */
+export const SITE = 'https://elyonlabs.com.au';
+
+/** Everyone's digital business card, edited in Keystatic under "Digital business cards". */
+export async function getCards() {
+	const entries = await reader.collections.cards.all();
+	return entries.map(({ slug, entry }) => ({
+		...entry,
+		slug,
+		site: SITE,
+		firstName: entry.name.trim().split(/\s+/)[0],
+		/** This person's card on the live site: what their QR code opens. */
+		cardUrl: `${SITE}/card/${slug}/`,
 		/** International format for the phone link and the saved contact, e.g. +61400000000. */
-		phoneE164: toE164(card.phone),
-		instagramUrl: card.instagram ? `https://www.instagram.com/${card.instagram.replace(/^@/, '')}` : '',
-	};
+		phoneE164: toE164(entry.phone),
+		instagramUrl: entry.instagram ? `https://www.instagram.com/${entry.instagram.replace(/^@/, '')}` : '',
+	}));
 }
 
-export type Card = Awaited<ReturnType<typeof getCard>>;
+export type Card = Awaited<ReturnType<typeof getCards>>[number];
+
+/** One page per card: shared by the card page, its contact file and its home-screen manifest. */
+export async function cardPaths() {
+	const cards = await getCards();
+	return cards.map((card) => ({ params: { slug: card.slug }, props: { card } }));
+}
 
 function toE164(phone: string) {
 	const digits = phone.replace(/[^\d+]/g, '');

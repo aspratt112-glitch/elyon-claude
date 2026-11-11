@@ -1,14 +1,16 @@
 ---
 // Digital business card, after the business card in the Elyon Brand Guidelines (Print, p.25).
 // Add it to a phone's home screen to keep it to hand; others scan the QR code to open it
-// and save the contact. Details are edited in Keystatic under "Digital business card".
+// and save the contact. One card per person, edited in Keystatic under "Digital business cards".
 import QRCode from 'qrcode';
-import '../styles/global.css';
-import Monogram from '../components/logos/Monogram.astro';
-import Wordmark from '../components/logos/Wordmark.astro';
-import { getCard } from '../lib/card';
+import '../../styles/global.css';
+import Monogram from '../../components/logos/Monogram.astro';
+import Wordmark from '../../components/logos/Wordmark.astro';
+import { cardPaths, type Card } from '../../lib/card';
 
-const card = await getCard(Astro.url.origin);
+export const getStaticPaths = cardPaths;
+
+const { card } = Astro.props as { card: Card };
 
 const qrSvg = await QRCode.toString(card.cardUrl, {
 	type: 'svg',
@@ -34,10 +36,10 @@ const description = `${card.title}, Elyon Labs. Premium men's haircare, made in 
 		<meta property="og:description" content={description} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="apple-touch-icon" href="/card/apple-touch-icon.png" />
-		<link rel="manifest" href="/card/manifest.webmanifest" />
+		<link rel="manifest" href={`/card/${card.slug}/manifest.webmanifest`} />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-title" content="Elyon Card" />
+		<meta name="apple-mobile-web-app-title" content={`${card.firstName} · Elyon`} />
 		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 		<title>{pageTitle}</title>
 	</head>
@@ -71,7 +73,7 @@ const description = `${card.title}, Elyon Labs. Premium men's haircare, made in 
 			</figure>
 
 			<div class="actions">
-				<a class="btn" href="/card/contact.vcf">Save contact</a>
+				<a class="btn" href={`/card/${card.slug}/contact.vcf`}>Save contact</a>
 				<button class="btn btn--outline" type="button" data-share data-url={card.cardUrl} data-title={pageTitle}>
 					Share link
 				</button>

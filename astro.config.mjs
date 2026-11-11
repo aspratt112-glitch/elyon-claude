@@ -32,9 +32,10 @@ function routes() {
 			'astro:config:setup': ({ injectRoute }) => {
 				const add = (pattern, file) => injectRoute({ pattern, entrypoint: `./src/routes/${file}` });
 
-				// The digital business card is always published, before and after launch
-				add('/card', 'card.astro');
-				add('/card/contact.vcf', 'card-contact.ts');
+				// Digital business cards are always published, before and after launch
+				add('/card/[slug]', 'card/[slug].astro');
+				add('/card/[slug]/contact.vcf', 'card/contact.ts');
+				add('/card/[slug]/manifest.webmanifest', 'card/manifest.ts');
 
 				if (launched || isDev) fullSite.forEach(([pattern, file]) => add(pattern, file));
 
@@ -54,6 +55,12 @@ function routes() {
 
 // https://astro.build/config
 export default defineConfig({
+	// Andrew's card lived at /card before there was one per person; QR codes already shared still point there.
+	// Netlify does the same redirect with a proper 301 (netlify.toml); this one covers `astro dev`.
+	redirects: {
+		'/card': '/card/andrew/',
+		'/card/contact.vcf': '/card/andrew/contact.vcf',
+	},
 	integrations: [react(), routes(), ...(isDev ? [keystatic()] : [])],
 	vite: {
 		plugins: [tailwindcss()],
