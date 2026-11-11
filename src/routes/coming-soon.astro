@@ -7,8 +7,12 @@ import { reader, getSettings } from '../lib/content';
 // The only page published until "Site is live" is ticked in Keystatic's Site settings.
 const landing = await reader.singletons.landing.readOrThrow();
 const settings = await getSettings();
-// Each line of the intro is its own paragraph
-const intro = (landing.text ?? '').split(/\n+/).map((line) => line.trim()).filter(Boolean);
+// A new line after a full stop (or ! or ?) starts a new paragraph; any other line break
+// is just wrapping (e.g. pasted text) and joins back into the sentence
+const intro = (landing.text ?? '')
+	.split(/(?<=[.!?])\s*\n\s*/)
+	.map((para) => para.replace(/\s*\n\s*/g, ' ').trim())
+	.filter(Boolean);
 ---
 
 <Layout title={landing.seo.title} description={landing.seo.description} bare>

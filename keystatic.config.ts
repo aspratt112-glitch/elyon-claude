@@ -84,7 +84,7 @@ export default config({
 				seo: seo(),
 				eyebrow: fields.text({ label: 'Label' }),
 				heading: fields.text({ label: 'Heading' }),
-				text: fields.text({ label: 'Text', multiline: true, description: 'Start a new line for a new paragraph.' }),
+				text: fields.text({ label: 'Text', multiline: true, description: 'Start a new line after a full stop for a new paragraph.' }),
 				buttonLabel: fields.text({ label: 'Button label' }),
 				note: fields.text({ label: 'Small print (footer)' }),
 				image: image('Image', 'landing'),
