@@ -5,7 +5,7 @@
 import QRCode from 'qrcode';
 import '../styles/global.css';
 import Monogram from '../components/logos/Monogram.astro';
-import WordmarkLabs from '../components/logos/WordmarkLabs.astro';
+import Wordmark from '../components/logos/Wordmark.astro';
 import { getCard } from '../lib/card';
 
 const card = await getCard(Astro.url.origin);
@@ -46,7 +46,7 @@ const description = `${card.title}, Elyon Labs. Premium men's haircare, made in 
 			<div class="card" data-card>
 				<div class="card__inner">
 					<div class="face face--front" aria-hidden="true">
-						<WordmarkLabs class="card__wordmark" />
+						<Wordmark class="card__wordmark" />
 					</div>
 					<div class="face face--back">
 						<p class="card__details">
@@ -180,7 +180,7 @@ const description = `${card.title}, Elyon Labs. Premium men's haircare, made in 
 
 			.card :global(.card__wordmark) {
 				display: block;
-				width: 72%;
+				width: 44%;
 				height: auto;
 			}
 
