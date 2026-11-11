@@ -1,8 +1,8 @@
 {
 	"name": "Elyon Labs Card",
 	"short_name": "Elyon Card",
-	"start_url": "/card",
-	"scope": "/card",
+	"start_url": "/card/",
+	"scope": "/card/",
 	"display": "standalone",
 	"background_color": "#eae1db",
 	"theme_color": "#eae1db",

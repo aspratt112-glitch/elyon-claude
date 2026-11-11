@@ -10,7 +10,7 @@ export async function getCard(origin: string) {
 		...card,
 		site,
 		/** The address the QR code opens: this card, on the live site. */
-		cardUrl: `${site}/card`,
+		cardUrl: `${site}/card/`,
 		/** International format for the phone link and the saved contact, e.g. +61400000000. */
 		phoneE164: toE164(card.phone),
 		instagramUrl: card.instagram ? `https://www.instagram.com/${card.instagram.replace(/^@/, '')}` : '',
