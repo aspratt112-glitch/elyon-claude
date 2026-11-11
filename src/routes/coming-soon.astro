@@ -7,7 +7,6 @@ import { reader, getSettings } from '../lib/content';
 // The only page published until "Site is live" is ticked in Keystatic's Site settings.
 const landing = await reader.singletons.landing.readOrThrow();
 const settings = await getSettings();
-const year = new Date().getFullYear();
 // Each line of the intro is its own paragraph
 const intro = (landing.text ?? '').split(/\n+/).map((line) => line.trim()).filter(Boolean);
 ---
@@ -22,14 +21,14 @@ const intro = (landing.text ?? '').split(/\n+/).map((line) => line.trim()).filte
 	>
 		{/* On phones a short band, so the form starts high enough to fit below it */}
 		<div
-			class="media relative overflow-hidden bg-espresso max-desk:h-[clamp(8rem,24svh,18rem)]
-				max-desk:[@media(max-height:720px)]:h-[11svh]"
+			class="media relative overflow-hidden bg-espresso max-desk:h-[clamp(12rem,36svh,22rem)]
+				max-desk:[@media(max-height:720px)]:h-[30svh]"
 		>
 			{/* Heavily blurred so the products only hint at themselves before launch. Oversized so
 			     the blur's soft edges fall outside the frame. */}
 			{landing.image && (
 				<img
-					class="absolute -inset-[10%] h-[120%] w-[120%] object-cover object-[30%_50%]
+					class="absolute -inset-[10%] h-[120%] w-[120%] max-w-none object-cover object-[30%_50%]
 						[filter:blur(14px)_saturate(0.8)_brightness(0.92)] max-desk:object-[40%_25%]"
 					src={landing.image}
 					alt=""
@@ -74,38 +73,21 @@ const intro = (landing.text ?? '').split(/\n+/).map((line) => line.trim()).filte
 					data-klaviyo-list={settings.klaviyo.listId}
 					data-source="Landing page"
 				>
-					<div class="grid grid-cols-2 gap-x-6 gap-y-(--v1) max-[341px]:grid-cols-1">
-						<div class="field gap-1">
-							<label class="label text-ink-muted" for="landing-first-name">First name</label>
-							<input class="py-[clamp(0.35rem,1.1svh,0.9rem)]" id="landing-first-name" name="firstName" type="text" required autocomplete="given-name" />
-						</div>
-						<div class="field gap-1">
-							<label class="label text-ink-muted" for="landing-last-name">Last name</label>
-							<input class="py-[clamp(0.35rem,1.1svh,0.9rem)]" id="landing-last-name" name="lastName" type="text" required autocomplete="family-name" />
-						</div>
-						<div class="field col-span-full gap-1">
-							<label class="label text-ink-muted" for="landing-email">Email</label>
-							<input class="py-[clamp(0.35rem,1.1svh,0.9rem)]" id="landing-email" name="email" type="email" required autocomplete="email" />
-						</div>
+					<div class="field gap-1">
+						<label class="label text-ink-muted" for="landing-email">Email</label>
+						<input class="py-[clamp(0.35rem,1.1svh,0.9rem)]" id="landing-email" name="email" type="email" required autocomplete="email" />
 					</div>
 					<button class="btn btn--light min-h-[clamp(2.75rem,6svh,3.5rem)] w-full" type="submit">{landing.buttonLabel || 'Join'}</button>
 					<p class="label text-center" id="landing-error" role="alert" hidden>
 						Something went wrong. Please try again{settings.email && `, or email us at ${settings.email}`}.
 					</p>
-					{landing.note && <p class="label text-center text-ink-muted">{landing.note}</p>}
 				</form>
 
 				<p class="text-h3 border-y border-rule py-6" id="landing-thanks" role="status" hidden>Thank you. You're on the list.</p>
 			</div>
 
-			<div class="label flex flex-wrap items-center gap-x-6 gap-y-4 border-t border-rule pt-(--v2) text-ink-muted">
-				<Monogram class="h-auto w-[1.1rem]" />
-				<ul class="mr-auto flex flex-wrap gap-6">
-					{settings.instagram && <li><a class="hover:text-mineral" href={settings.instagram} rel="noopener">Instagram</a></li>}
-					{settings.email && <li><a class="hover:text-mineral" href={`mailto:${settings.email}`}>{settings.email}</a></li>}
-				</ul>
-				<span>© {year} Elyon Labs</span>
-			</div>
+			{/* The small print sits in the footer row */}
+			{landing.note && <p class="label border-t border-rule pt-(--v2) text-ink-muted">{landing.note}</p>}
 		</div>
 	</div>
 </Layout>
